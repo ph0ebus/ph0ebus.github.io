@@ -1,1 +1,1 @@
-[{"name":"wp","path":"api/tags/wp.json","slug":"wp","count":3},{"name":"ctf","path":"api/tags/ctf.json","slug":"ctf","count":1},{"name":"oi","path":"api/tags/oi.json","slug":"oi","count":6},{"name":"排序","path":"api/tags/排序.json","slug":"排序","count":6},{"name":"python","path":"api/tags/python.json","slug":"python","count":6}]
+[{"name":"wp","path":"api/tags/wp.json","slug":"wp","count":3},{"name":"反序列化","path":"api/tags/反序列化.json","slug":"反序列化","count":1},{"name":"ctf","path":"api/tags/ctf.json","slug":"ctf","count":1}]
