@@ -1,1 +1,1 @@
-[{"name":"ctf","path":"api/categories/ctf.json","slug":"ctf","count":4},{"name":"靶场#分类 用于文章列表分类","path":"api/categories/靶场-分类-用于文章列表分类.json","slug":"靶场-分类-用于文章列表分类","count":1},{"name":"note","path":"api/categories/note.json","slug":"note","count":1}]
+[{"name":"CTF","path":"api/categories/CTF.json","slug":"CTF","count":4},{"name":"靶场","path":"api/categories/靶场.json","slug":"靶场","count":1},{"name":"NOTE","path":"api/categories/NOTE.json","slug":"NOTE","count":1}]
