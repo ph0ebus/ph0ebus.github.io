@@ -6,24 +6,26 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Hexo</title>
-  <meta name="author" content="John Doe">
+  <title>ph0ebus&#39;s Blog</title>
+  <meta name="author" content="ph0ebus">
+  
+  <meta name="description" content="ph0ebus&#39;s Blog">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="Hexo"/>
+  <meta property="og:site_name" content="ph0ebus&#39;s Blog"/>
 
   
     <meta property="og:image" content=""/>
   
 
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/search.xml" title="ph0ebus&#39;s Blog" type="application/atom+xml">
   
   
-    <link href="/favicon.png" rel="icon">
+    <link href="/favicon.ico" rel="icon">
   
   
   <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
@@ -65,37 +67,37 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-	  <a class="navbar-brand" href="/">Hexo</a>
+	  <a class="navbar-brand" href="/">ph0ebus&#39;s Blog</a>
       <div class="collapse navbar-collapse nav-menu">
 		<ul class="nav navbar-nav">
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/categories" title="All the categories.">
-			  <i class=""></i>Categories
+			  <i class="fa fa-folder"></i>Categories
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
+			  <i class="fa fa-tags"></i>Tags
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/about" title="About me.">
-			  <i class=""></i>About
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
 		  <li>
-			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
+			<a href="/search.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
 			</a>
 		  </li>
 		  
@@ -108,7 +110,7 @@
   <div class="container">
   	<div class="content">
     	 <div class="page-header logo">
-  <h1>Hexo<span class="blink-fast">|</span></h1>
+  <h1>ph0ebus&#39;s Blog<span class="blink-fast">|</span></h1>
 </div>
 
 <div class="row page">
@@ -122,7 +124,7 @@
 
 		<i class="fa fa-heart blink-slow"></i>
 
-		wubba lubba dub dub.
+		no hack no fun...
 
 </div>    
 
@@ -137,11 +139,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/11/20/hello-world/" >Hello World</a>
+			<a href="/2024/11/21/hexo博客部署到github/" title="Introduce how to deploy hexo blog to github.">hexo博客部署到github</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-11-20  </div>
+		<div class="date">post @ 2024-11-21  </div>
 		</div>
 	</div>
 	
@@ -151,17 +153,16 @@
   <div class="row">
 	
 	
-		<p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+		<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p><a target="_blank" rel="noopener" href="https://git-scm.com/">Git</a></p>
+<h2 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h2><p>可以直接上<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/prebuilt-installer">https://nodejs.org/zh-cn/download/prebuilt-installer</a></p>
+<p>有多版本需求的也可以用nvm管理多个版本的nodejs</p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/ph0ebus/security/rupe9swqdeftppqg">nvm管理多版本nodejs环境</a></p>
+<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>安装好后执行<code>hexo -version</code></p>
 	
 	</div>
-  <a type="button" href="/2024/11/20/hello-world/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2024/11/21/hexo博客部署到github/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -198,8 +199,29 @@
 
 		
 			
+	<div class="widget">
+		<h4>Categories</h4>
+		<ul class="tag_box inline list-unstyled">
+		
+			<li><a href="/categories/environment/">environment<span>1</span></a></li>
+		
+		</ul>
+	</div>
+
 		
 			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/environment/">environment<span>1</span></a></li>
+		
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+		
+		 
+		</ul>
+	</div>
+
 
 		
 			
@@ -208,7 +230,7 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/11/20/hello-world/" ><i class="fa fa-file-o"></i>Hello World</a>
+        <a href="/2024/11/21/hexo博客部署到github/"  title="Introduce how to deploy hexo blog to github." ><i class="fa fa-file-o"></i>hexo博客部署到github</a>
       </li>
     
   </ul>
@@ -238,7 +260,7 @@
   <div class="container-narrow">
   <footer> <p>
   
-  &copy; 2024 John Doe's Blog
+  &copy; 2024 ph0ebus's Blog
   
       powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
 </p>
