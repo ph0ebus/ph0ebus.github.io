@@ -139,6 +139,39 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/03/11/CVE-2025-24813 源码分析复现/" >CVE-2025-24813 源码分析复现</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-03-11  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Apache Tomcat是一个流行的开源 Web 服务器和 Java Servlet 容器。</p>
+<p>Apache Tomcat 应用程序在启用了servlet的写入功能（默认禁用）、使用Tomcat文件会话持久化、存储机制默认位置且包含可反序列化利用的依赖库时可以上传恶意序列化流，并触发反序列化进行进一步利用，可造成远程命令执行等危害。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p>11.0.0-M1 &lt;&#x3D; Apache Tomcat &lt;&#x3D; 11.0.2</p>
+<p>10.1.0-M1 &lt;&#x3D; Apache Tomcat &lt;&#x3D; 10.1.34</p>
+<p>9.0.0.M1 &lt;&#x3D; Apache Tomcat &lt;&#x3D; 9.0.98</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>修改 tomcat 安装目录中 conf&#x2F;web.xml 文件，设置 readonly 为 false</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 启用写入 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>readonly<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2025/03/11/CVE-2025-24813 源码分析复现/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/12/20/Apache Struts S2-067 漏洞分析/" title="CVE-2024-53677">Apache Struts S2-067 漏洞分析</a>
 		</h3>
 		</div>
@@ -414,7 +447,7 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/cve/">cve<span>5</span></a></li>
+			<li><a href="/categories/cve/">cve<span>6</span></a></li>
 		
 			<li><a href="/categories/environment/">environment<span>1</span></a></li>
 		
@@ -429,19 +462,21 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/tomcat/">tomcat<span>1</span></a></li>
+		
+			<li><a href="/tags/kkFileView/">kkFileView<span>1</span></a></li>
+		
 			<li><a href="/tags/environment/">environment<span>1</span></a></li>
 		
 			<li><a href="/tags/fastjson/">fastjson<span>1</span></a></li>
 		
-			<li><a href="/tags/kafka/">kafka<span>1</span></a></li>
-		
 			<li><a href="/tags/struts/">struts<span>3</span></a></li>
 		
-			<li><a href="/tags/kkFileView/">kkFileView<span>1</span></a></li>
-		
-			<li><a href="/tags/security/">security<span>6</span></a></li>
-		
 			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/security/">security<span>7</span></a></li>
+		
+			<li><a href="/tags/kafka/">kafka<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -453,6 +488,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/03/11/CVE-2025-24813 源码分析复现/" ><i class="fa fa-file-o"></i>CVE-2025-24813 源码分析复现</a>
+      </li>
     
       <li>
         <a href="/2024/12/20/Apache Struts S2-067 漏洞分析/"  title="CVE-2024-53677" ><i class="fa fa-file-o"></i>Apache Struts S2-067 漏洞分析</a>
@@ -468,10 +507,6 @@
     
       <li>
         <a href="/2024/12/15/Apache Struts S2-066 漏洞分析/"  title="CVE-2023-50164" ><i class="fa fa-file-o"></i>Apache Struts S2-066 漏洞分析</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/12/fastjson1.2.80 in Springtboot新链学习/"  title="fastjson1.2.80 in Springtboot" ><i class="fa fa-file-o"></i>fastjson1.2.80 in Springtbo...</a>
       </li>
     
   </ul>
@@ -505,7 +540,7 @@
   <div class="container-narrow">
   <footer> <p>
   
-  &copy; 2024 ph0ebus's Blog
+  &copy; 2025 ph0ebus's Blog
   
       powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
 </p>
