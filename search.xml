@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>CISCN-长城杯半决赛ISW部分Writeup</title>
+      <link href="/2025/03/25/CISCN-%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9BISW%E9%83%A8%E5%88%86Writeup/"/>
+      <url>/2025/03/25/CISCN-%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9BISW%E9%83%A8%E5%88%86Writeup/</url>
+      
+        <content type="html"><![CDATA[<h1 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h1><p>猜测是任意文件读取</p><p><img src="https://s2.loli.net/2025/03/25/YnFzZyGiAh9O5RE.png" alt="image-20250316141246133"></p><p>通过读取&#x2F;proc&#x2F;self&#x2F;cmdline可以定位到jar包，下载后找到shirokey</p><p><img src="https://s2.loli.net/2025/03/25/iKuweLVAsndJhQo.png" alt="image-20250316141311170"></p><p>直接打shiro反序列化</p><p><img src="https://s2.loli.net/2025/03/25/aQGbYqoMBLTArKs.png" alt="image-20250316141329853"></p><p>注入内存马</p><p><img src="https://s2.loli.net/2025/03/25/F5PlT2LKGbtCfd4.png" alt="image-20250316141345139"></p><p>写入.ssh公钥</p><p><img src="https://s2.loli.net/2025/03/25/SnpKB6IDhxEgyGA.png" alt="image-20250316141404115"></p><p>登录，suid提权</p><p><img src="https://s2.loli.net/2025/03/25/ixSY4mns9DENwI7.png" alt="image-20250316141425856"></p><h1 id="web-git"><a href="#web-git" class="headerlink" title="web-git"></a>web-git</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>存在目录遍历，可以找到预留后门</p><p><img src="https://s2.loli.net/2025/03/25/XbRwB1iTq9DufZC.png" alt="image-20250316142821864"></p><p><img src="https://s2.loli.net/2025/03/25/lSXtad6EoI2GZVi.png" alt="image-20250316142758195"></p><p>恢复git记录</p><p><img src="https://s2.loli.net/2025/03/25/3SFMgpOvYomZP1G.png" alt="6770903bec5838003c6749bd_1742115677231"></p><h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>查看文件权限发现&#x2F;home&#x2F;ryan下del.py可写，猜测是定时执行，直接反弹shell</p><p><img src="https://s2.loli.net/2025/03/25/LuBdGcWtxPeSCqm.png" alt="image-20250316154059221"></p><p><img src="https://s2.loli.net/2025/03/25/irOeT8hJUVm7ZbG.png" alt="image-20250316154125428"></p><p><img src="https://s2.loli.net/2025/03/25/tibXOEsymekVD9I.png" alt="image-20250316154242843"></p><p>ssh默认未启动需要手动开启</p><p><img src="https://s2.loli.net/2025/03/25/TRYkmjLdgya3AQ2.png" alt="image-20250316154305860"></p><p>修改root密码直接ssh连上</p><p><img src="https://s2.loli.net/2025/03/25/UFvBmYcs6TDakSp.png" alt="image-20250316154350159"></p><p><img src="https://s2.loli.net/2025/03/25/prUD9FNKfXjhHid.png" alt="image-20250316154413412"></p><p>查看aim.jpg然后人工OCR一下得到flag</p><h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>在&#x2F;home&#x2F;gitlab可以找到可疑文件lookme，发现flag</p><p><img src="https://s2.loli.net/2025/03/25/914ARSeIWubG2Yc.png" alt="6770903bec5838003c6749bd_1742116134975"></p><h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>查看mail可以找到flag，解base64即可</p><p><img src="https://s2.loli.net/2025/03/25/AY5cIUt7v4MXnSu.png" alt="image-20250316160851215"></p><h1 id="应急响应"><a href="#应急响应" class="headerlink" title="应急响应"></a>应急响应</h1><h2 id="flag1-1"><a href="#flag1-1" class="headerlink" title="flag1"></a>flag1</h2><p>直接抓取对应网卡eth1的流量，等待五分钟后的结果，下载下来然后用wireshark分析</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> tcpdump -i eth1 -w output.pcap</span><br></pre></td></tr></table></figure><p>Wireshark图片</p><p>找到<code>192.168.57.203:4948</code>，md5得到<code>59110f555b5e5cd0a8713a447b082d63</code>，包上flag提交</p><p><img src="https://s2.loli.net/2025/03/25/MtEm69pgnal7kTz.png" alt="6741506cdf031d003c586ad8_1742115244313"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctf </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> security </tag>
+            
+            <tag> writeup </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Apache Tomcat CVE-2025-24813 漏洞分析复现</title>
       <link href="/2025/03/11/Apache%20Tomcat%20CVE-2025-24813%20%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/"/>
       <url>/2025/03/11/Apache%20Tomcat%20CVE-2025-24813%20%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%A4%8D%E7%8E%B0/</url>

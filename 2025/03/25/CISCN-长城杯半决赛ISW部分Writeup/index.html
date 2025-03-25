@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>CISCN-长城杯半决赛ISW部分Writeup | ph0ebus&#39;s Blog</title>
+  <meta name="author" content="ph0ebus">
+  
+  <meta name="description" content="AWDP坐大牢，靠ISW拯救一下">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="CISCN-长城杯半决赛ISW部分Writeup"/>
+  <meta property="og:site_name" content="ph0ebus&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/search.xml" title="ph0ebus&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ph0ebus&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/search.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> CISCN-长城杯半决赛ISW部分Writeup</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> AWDP坐大牢，靠ISW拯救一下
+		 </div> <!-- alert -->
+	  		
+
+	  <h1 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h1><p>猜测是任意文件读取</p>
+<p><img src="https://s2.loli.net/2025/03/25/YnFzZyGiAh9O5RE.png" alt="image-20250316141246133"></p>
+<p>通过读取&#x2F;proc&#x2F;self&#x2F;cmdline可以定位到jar包，下载后找到shirokey</p>
+<p><img src="https://s2.loli.net/2025/03/25/iKuweLVAsndJhQo.png" alt="image-20250316141311170"></p>
+<p>直接打shiro反序列化</p>
+<p><img src="https://s2.loli.net/2025/03/25/aQGbYqoMBLTArKs.png" alt="image-20250316141329853"></p>
+<p>注入内存马</p>
+<p><img src="https://s2.loli.net/2025/03/25/F5PlT2LKGbtCfd4.png" alt="image-20250316141345139"></p>
+<p>写入.ssh公钥</p>
+<p><img src="https://s2.loli.net/2025/03/25/SnpKB6IDhxEgyGA.png" alt="image-20250316141404115"></p>
+<p>登录，suid提权</p>
+<p><img src="https://s2.loli.net/2025/03/25/ixSY4mns9DENwI7.png" alt="image-20250316141425856"></p>
+<h1 id="web-git"><a href="#web-git" class="headerlink" title="web-git"></a>web-git</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>存在目录遍历，可以找到预留后门</p>
+<p><img src="https://s2.loli.net/2025/03/25/XbRwB1iTq9DufZC.png" alt="image-20250316142821864"></p>
+<p><img src="https://s2.loli.net/2025/03/25/lSXtad6EoI2GZVi.png" alt="image-20250316142758195"></p>
+<p>恢复git记录</p>
+<p><img src="https://s2.loli.net/2025/03/25/3SFMgpOvYomZP1G.png" alt="6770903bec5838003c6749bd_1742115677231"></p>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>查看文件权限发现&#x2F;home&#x2F;ryan下del.py可写，猜测是定时执行，直接反弹shell</p>
+<p><img src="https://s2.loli.net/2025/03/25/LuBdGcWtxPeSCqm.png" alt="image-20250316154059221"></p>
+<p><img src="https://s2.loli.net/2025/03/25/irOeT8hJUVm7ZbG.png" alt="image-20250316154125428"></p>
+<p><img src="https://s2.loli.net/2025/03/25/tibXOEsymekVD9I.png" alt="image-20250316154242843"></p>
+<p>ssh默认未启动需要手动开启</p>
+<p><img src="https://s2.loli.net/2025/03/25/TRYkmjLdgya3AQ2.png" alt="image-20250316154305860"></p>
+<p>修改root密码直接ssh连上</p>
+<p><img src="https://s2.loli.net/2025/03/25/UFvBmYcs6TDakSp.png" alt="image-20250316154350159"></p>
+<p><img src="https://s2.loli.net/2025/03/25/prUD9FNKfXjhHid.png" alt="image-20250316154413412"></p>
+<p>查看aim.jpg然后人工OCR一下得到flag</p>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>在&#x2F;home&#x2F;gitlab可以找到可疑文件lookme，发现flag</p>
+<p><img src="https://s2.loli.net/2025/03/25/914ARSeIWubG2Yc.png" alt="6770903bec5838003c6749bd_1742116134975"></p>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>查看mail可以找到flag，解base64即可</p>
+<p><img src="https://s2.loli.net/2025/03/25/AY5cIUt7v4MXnSu.png" alt="image-20250316160851215"></p>
+<h1 id="应急响应"><a href="#应急响应" class="headerlink" title="应急响应"></a>应急响应</h1><h2 id="flag1-1"><a href="#flag1-1" class="headerlink" title="flag1"></a>flag1</h2><p>直接抓取对应网卡eth1的流量，等待五分钟后的结果，下载下来然后用wireshark分析</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> tcpdump -i eth1 -w output.pcap</span><br></pre></td></tr></table></figure>
+
+<p>Wireshark图片</p>
+<p>找到<code>192.168.57.203:4948</code>，md5得到<code>59110f555b5e5cd0a8713a447b082d63</code>，包上flag提交</p>
+<p><img src="https://s2.loli.net/2025/03/25/MtEm69pgnal7kTz.png" alt="6741506cdf031d003c586ad8_1742115244313"></p>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/03/11/Apache Tomcat CVE-2025-24813 漏洞分析复现/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+		<section id="comments" class="comments">
+			<style>
+			.comments{margin:30px;padding:10px;background:rgb(0, 0, 0)}
+			@media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#000}}
+			</style>
+			<div id="vcomment" class="comment"></div>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var valineConfig = {"enable":true,"appId":"Cbgk0YxBpLhiX5GAO3blh1dL-gzGzoHsz","appKey":"sXGSZcQ400OknswrtdEDSiTp","placeholder":"Comment with Email address will get notification when replied","visitor":false,"avatar":"monsterid","requiredFields":["nick","mail"],"pageView":false}
+valineConfig.el='#vcomment';
+new Valine(valineConfig);
+    // new Valine({
+    //     el: '#vcomment',
+    //     appId: "",
+    //     appKey: "",
+    //     placeholder: "Comment with Email address will get notification when replied",
+    //     avatar:"monsterid",
+    //     visitor: "false",
+    //     requiredFields: "nick,mail".split(','),
+    // });
+</script>
+
+		</section>
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-03-25 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/ctf/">ctf<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/security/">security<span>8</span></a></li> <li><a href="/tags/writeup/">writeup<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="toc-article-text">数据管理</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#web-git"><span class="toc-article-text">web-git</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#flag1"><span class="toc-article-text">flag1</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#flag5"><span class="toc-article-text">flag5</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#flag4"><span class="toc-article-text">flag4</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#flag3"><span class="toc-article-text">flag3</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-article-text">应急响应</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#flag1-1"><span class="toc-article-text">flag1</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 ph0ebus's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
