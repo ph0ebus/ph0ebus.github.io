@@ -139,6 +139,41 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2025/04/09/CVE-2024-36465 Zabbix SQL注入漏洞分析/" title="首发于奇安信攻防社区 https://forum.butian.net/article/690">CVE-2024-42327 Zabbix SQL注入漏洞分析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-04-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>仅供学习交流，请勿用于非法行为</p>
+</blockquote>
+<p>看到有公众号发了漏洞描述，但没有详情，直接分析一手</p>
+<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Zabbix 是一款开源的网络监控和报警系统，用于监视网络设备、服务器和应用程序的性能和可用性。</p>
+<p>一个具有 API 访问权限的低权限（常规）Zabbix 用户可以利用 include&#x2F;classes&#x2F;api&#x2F;CApiService.php 中的 SQL 注入漏洞，通过 groupBy 参数执行任意 SQL 命令。</p>
+<h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p><img src="https://shs3.b.qianxin.com/attack_forum/2025/04/attach-d8f6844232d4ed3afd1d81118b86e06bcf536bf9.png" alt="image.png"></p>
+<p>7.0.0 &lt;&#x3D; zabbix &lt;&#x3D; 7.0.7</p>
+<p>7.2.0 &lt;&#x3D; zabbix &lt;&#x3D; 7.2.1</p>
+	
+	</div>
+  <a type="button" href="/2025/04/09/CVE-2024-36465 Zabbix SQL注入漏洞分析/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2025/04/03/Apache Pinot CVE-2024-56325 Authentication Bypass 漏洞分析/" title="首发于奇安信攻防社区 https://forum.butian.net/article/685">Apache Pinot CVE-2024-56325 Authentication Bypass 漏洞分析</a>
 		</h3>
 		</div>
@@ -272,7 +307,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/20/CVE-2024-42327 Zabbix SQL注入漏洞分析/" title="CVE-2024-42327">CVE-2024-42327 Zabbix SQL注入漏洞分析</a>
+			<a href="/2024/12/20/CVE-2024-42327 Zabbix SQL注入漏洞分析/" title="首发于奇安信攻防社区 https://forum.butian.net/article/639">CVE-2024-42327 Zabbix SQL注入漏洞分析</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -286,16 +321,13 @@
   <div class="row">
 	
 	
-		<blockquote>
-<p>首发于奇安信攻防社区 <a target="_blank" rel="noopener" href="https://forum.butian.net/article/639">https://forum.butian.net/article/639</a></p>
-</blockquote>
-<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Zabbix 是一款开源的网络监控和报警系统，用于监视网络设备、服务器和应用程序的性能和可用性。</p>
+		<h1 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h1><p>Zabbix 是一款开源的网络监控和报警系统，用于监视网络设备、服务器和应用程序的性能和可用性。</p>
 <p>攻击者可以通过API接口，向 user.get API端点发送恶意构造的请求，注入SQL代码，以实现权限提升、数据泄露或系统入侵。</p>
 <h1 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h1><p><img src="https://s2.loli.net/2024/12/20/26EGzIoJ9CemNAZ.png" alt="img"></p>
 <p>6.0.0 &lt;&#x3D; Zabbix &lt;&#x3D; 6.0.31</p>
 <p>6.4.0 &lt;&#x3D; Zabbix &lt;&#x3D; 6.4.16</p>
 <p>Zabbix 7.0.0</p>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>参考<a target="_blank" rel="noopener" href="https://forum.butian.net/share/3056">https://forum.butian.net/share/3056</a></p>
 	
 	</div>
   <a type="button" href="/2024/12/20/CVE-2024-42327 Zabbix SQL注入漏洞分析/#more" class="btn btn-default more">Read More</a>
@@ -444,39 +476,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/11/21/hexo博客部署到github/" title="Introduce how to deploy hexo blog to github.">hexo博客部署到github</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-11-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p><a target="_blank" rel="noopener" href="https://git-scm.com/">Git</a></p>
-<h2 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h2><p>可以直接上<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/prebuilt-installer">https://nodejs.org/zh-cn/download/prebuilt-installer</a></p>
-<p>有多版本需求的也可以用nvm管理多个版本的nodejs</p>
-<p><a target="_blank" rel="noopener" href="https://www.yuque.com/ph0ebus/security/rupe9swqdeftppqg">nvm管理多版本nodejs环境</a></p>
-<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-
-<p>安装好后执行<code>hexo -version</code></p>
-	
-	</div>
-  <a type="button" href="/2024/11/21/hexo博客部署到github/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -486,6 +485,16 @@
 		<div class="pagination">
 
    
+    
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+        
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
 </div>
 
   		</center>
@@ -516,7 +525,7 @@
 		
 			<li><a href="/categories/ctf/">ctf<span>1</span></a></li>
 		
-			<li><a href="/categories/cve/">cve<span>7</span></a></li>
+			<li><a href="/categories/cve/">cve<span>8</span></a></li>
 		
 			<li><a href="/categories/environment/">environment<span>1</span></a></li>
 		
@@ -531,25 +540,27 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/zabbix/">zabbix<span>2</span></a></li>
+		
+			<li><a href="/tags/writeup/">writeup<span>1</span></a></li>
+		
 			<li><a href="/tags/kafka/">kafka<span>1</span></a></li>
 		
-			<li><a href="/tags/kkFileView/">kkFileView<span>1</span></a></li>
+			<li><a href="/tags/security/">security<span>10</span></a></li>
 		
-			<li><a href="/tags/security/">security<span>9</span></a></li>
-		
-			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+			<li><a href="/tags/struts/">struts<span>2</span></a></li>
 		
 			<li><a href="/tags/fastjson/">fastjson<span>1</span></a></li>
 		
 			<li><a href="/tags/environment/">environment<span>1</span></a></li>
 		
+			<li><a href="/tags/kkFileView/">kkFileView<span>1</span></a></li>
+		
+			<li><a href="/tags/pinot/">pinot<span>1</span></a></li>
+		
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+		
 			<li><a href="/tags/tomcat/">tomcat<span>1</span></a></li>
-		
-			<li><a href="/tags/writeup/">writeup<span>1</span></a></li>
-		
-			<li><a href="/tags/struts/">struts<span>2</span></a></li>
-		
-			<li><a href="/tags/zabbix/">zabbix<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -561,6 +572,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/04/09/CVE-2024-36465 Zabbix SQL注入漏洞分析/"  title="首发于奇安信攻防社区 https://forum.butian.net/article/690" ><i class="fa fa-file-o"></i>CVE-2024-42327 Zabbix SQL注入...</a>
+      </li>
     
       <li>
         <a href="/2025/04/03/Apache Pinot CVE-2024-56325 Authentication Bypass 漏洞分析/"  title="首发于奇安信攻防社区 https://forum.butian.net/article/685" ><i class="fa fa-file-o"></i>Apache Pinot CVE-2024-56325...</a>
@@ -578,10 +593,6 @@
         <a href="/2024/12/20/Apache Struts S2-067 漏洞分析/"  title="CVE-2024-53677" ><i class="fa fa-file-o"></i>Apache Struts S2-067 漏洞分析</a>
       </li>
     
-      <li>
-        <a href="/2024/12/20/CVE-2024-42327 Zabbix SQL注入漏洞分析/"  title="CVE-2024-42327" ><i class="fa fa-file-o"></i>CVE-2024-42327 Zabbix SQL注入...</a>
-      </li>
-    
   </ul>
 </div>
 
@@ -591,11 +602,21 @@
 	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-user-o"></i><a href="http://blog.187.ink/" title="大哥带我" target="_blank"]);">L1mbo</a></li>
+		<li><i class="fa fa-terminal"></i><a href="https://www.dkdun.cn/" title="领先的云服务商，赞赞赞" target="_blank"]);">DK盾 | 林枫云</a></li>
 	
-		<li><i class="fa fa-user-o"></i><a href="https://www.dkdun.cn/" title="领先的云服务商，赞赞赞" target="_blank"]);">DK盾 | 林枫云</a></li>
+		<li><i class="fa fa-terminal"></i><a href="https://arsenetang.github.io/" title="带我入门的汤神！" target="_blank"]);">Arsene.Tang</a></li>
 	
-		<li><i class="fa fa-user-o"></i><a href="mailto:ph0ebus@qq.com" title="hello world" target="_blank"]);">好友位招租（</a></li>
+		<li><i class="fa fa-terminal"></i><a href="http://blog.187.ink/" title="大哥带我" target="_blank"]);">L1mbo</a></li>
+	
+		<li><i class="fa fa-terminal"></i><a href="https://www.yuque.com/misery333" title="广义术术人 ✩ 沃玛单推人" target="_blank"]);">M1sery</a></li>
+	
+		<li><i class="fa fa-terminal"></i><a href="http://s0rry.cn/" title="逆向神，斩获无数大厂Offer" target="_blank"]);">s0rry</a></li>
+	
+		<li><i class="fa fa-terminal"></i><a href="https://infernity.top/" title="恐怖如斯的web学弟 & vn队长" target="_blank"]);">Infernity</a></li>
+	
+		<li><i class="fa fa-terminal"></i><a href="https://boogipop.com/" title="神" target="_blank"]);">Boogipop</a></li>
+	
+		<li><i class="fa fa-terminal"></i><a href="mailto:ph0ebus@qq.com" title="hello world" target="_blank"]);">好友位招租（</a></li>
 	
 	</ul>
 </div>
